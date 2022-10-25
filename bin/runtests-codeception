@@ -1,0 +1,59 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * This file is part of O3-Shop Testing library.
+ *
+ * O3-Shop is free software: you can redistribute it and/or modify  
+ * it under the terms of the GNU General Public License as published by  
+ * the Free Software Foundation, version 3.
+ *
+ * O3-Shop is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
+ *
+ * @copyright  Copyright (c) 2022 OXID eSales AG (https://www.oxid-esales.com)
+ * @copyright  Copyright (c) 2022 O3-Shop (https://www.o3-shop.com)
+ * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
+ */
+
+use OxidEsales\TestingLibrary\Helper\TestResultsPrintingHelper;
+use OxidEsales\TestingLibrary\TestConfig;
+
+require_once __DIR__ .'/../base.php';
+
+$testConfig = new TestConfig();
+$resultsHelper = new TestResultsPrintingHelper();
+$codeceptionSuites = $codeceptionSuites ?? 'acceptance,acceptanceAdmin';
+$arguments = [];
+array_shift($argv);
+foreach ($argv as $argument) {
+    $arguments[] = (strpos($argument, '-') === 0) ? $argument : escapeshellarg($argument);
+}
+$arguments = implode(' ', $arguments);
+
+$php = getenv('PHPBIN') ? getenv('PHPBIN') : 'php';
+
+$returnCode = 0;
+foreach ($testConfig->getTestSuites() as $suite) {
+    if (!file_exists($configurationFile = "$suite/codeception.yml")) {
+        continue;
+    }
+    $configuration = "-c " . escapeshellarg($configurationFile);
+    $codecept = $testConfig->getVendorDirectory() . '/bin/codecept';
+    passthru(
+            "$php $codecept build $configuration",
+            $ccReturnCode
+    );
+    $reportFileName = $resultsHelper->getReportFileName();
+    passthru(
+            "TEST_SUITE=$suite $php $codecept $configuration run $codeceptionSuites --xml $reportFileName --no-colors $arguments",
+            $ccReturnCode
+    );
+    $returnCode = $returnCode == 0 ? $ccReturnCode : $returnCode;
+}
+
+exit($returnCode);

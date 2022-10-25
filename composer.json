@@ -1,0 +1,89 @@
+{
+    "name": "o3-shop/testing-library",
+    "description": "OXID eShop testing library",
+    "type": "library",
+    "keywords": ["o3-shop", "testing", "library", "modules", "eShop"],
+    "homepage": "https://www.o3-shop.com/",
+    "license": "GPL-3.0-only",
+    "author": [
+        {
+            "name": "OXID eSales AG",
+            "email": "info@oxid-esales.com",
+            "homepage": "https://oxid-esales.com",
+            "role": "Developer"
+        },
+        {
+            "name": "O3-Shop",
+            "email": "info@o3-shop.com",
+            "homepage": "https://www.o3-shop.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "phpunit/phpunit": "^8.5.14",
+        "pdepend/pdepend": "2.6.0",
+        "mikey179/vfsstream": "~1.6.8",
+        "behat/mink": "~1.5.0",
+        "o3-shop/mink-selenium-driver": "~v1.0.0",
+        "symfony/yaml": "~3.0",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "symfony/dom-crawler": "v2.7.*",
+        "symfony/filesystem": "^4.4.17",
+        "o3-shop/shop-facts": "^1.0.0",
+        "o3-shop/shop-unified-namespace-generator": "^1.0.0",
+        "phpunit/php-code-coverage": "^7.0.12",
+        "codeception/codeception": "^4",
+        "codeception/module-asserts": "^1.3",
+        "codeception/module-webdriver": "^1.1",
+        "codeception/module-db": "^1.0",
+        "codeception/module-filesystem": "^1.0",
+        "o3-shop/codeception-modules": "^v1.0.0",
+        "o3-shop/codeception-page-objects": "^v1.0.0",
+        "o3-shop/developer-tools": "^1.0.0",
+        "symfony/polyfill-intl-idn": "1.17.1"
+    },
+    "bin": [
+        "bin/reset-shop",
+        "bin/runmetrics",
+        "bin/runtests",
+        "bin/runtests-codeception",
+        "bin/runtests-codeception-admin",
+        "bin/runtests-codeception-shop",
+        "bin/runtests-coverage",
+        "bin/runtests-selenium"
+    ],
+    "include-path": [
+        "../../symfony/yaml/"
+    ],
+    "autoload": {
+        "psr-4": {"OxidEsales\\TestingLibrary\\": "library/"}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OxidEsales\\TestingLibrary\\Tests\\": "./tests"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ]
+    },
+    "extra": {
+        "incenteev-parameters": {
+            "file": "test_config.yml",
+            "parameter-key": "mandatory_parameters",
+            "env-map": {
+                "shop_path": "SHOP_PATH",
+                "shop_tests_path": "SHOP_TESTS_PATH",
+                "partial_module_paths": "PARTIAL_MODULE_PATHS"
+            }
+        }
+    },
+    "replace": {
+        "oxid-esales/testing-library": "8.1.0"
+    }
+}
