@@ -88,15 +88,12 @@ class ShopInstaller implements ShopServiceInterface
         if ($tempDir = $request->getParameter('tempDirectory')) {
             $this->insertConfigValue('string', 'sCompileDir', $tempDir);
         }
-        $this->insertConfigValue('int', 'sOnlineLicenseNextCheckTime', time() + 25920000);
 
         if ($request->getParameter('addDemoData', false)) {
             $this->insertDemoData();
         }
 
         $this->setConfigurationParameters();
-
-        $this->setSerialNumber($serialNumber);
 
         $config = $this->getShopConfig();
         $default = property_exists($config, 'turnOnVarnish') ? $config->turnOnVarnish : false;

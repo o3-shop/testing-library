@@ -958,7 +958,7 @@ abstract class MinkWrapper extends BaseTestCase
             }
         }
 
-        return $oOption ? $oOption->getValue() : "";
+        return isset($oOption) ? $oOption->getValue() : "";
     }
 
     /**
