@@ -173,8 +173,8 @@ class ShopInstaller implements ShopServiceInterface
         $dbHandler->query("delete from oxconfig where oxvarname in ('iSetUtfMode','blSendTechnicalInformationToOxid');");
         $dbHandler->query(
             "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values " .
-            "('config1', '{$sShopId}', 'iSetUtfMode',       'str',  ENCODE('0', '{$this->getConfigKey()}') )," .
-            "('config2', '{$sShopId}', 'blSendTechnicalInformationToOxid', 'bool', ENCODE('1', '{$this->getConfigKey()}') )"
+            "('config1', '{$sShopId}', 'iSetUtfMode',       'str',  '0' )," .
+            "('config2', '{$sShopId}', 'blSendTechnicalInformationToOxid', 'bool', '1' )"
         );
     }
 
@@ -295,7 +295,7 @@ class ShopInstaller implements ShopServiceInterface
 
         $dbHandler->query("DELETE from oxconfig WHERE oxvarname = '$name';");
         $dbHandler->query("REPLACE INTO `oxconfig` (`OXID`, `OXSHOPID`, `OXMODULE`, `OXVARNAME`, `OXVARTYPE`, `OXVARVALUE`) VALUES
-            ('$oxid', $shopId, '', '$name', '$type', ENCODE('{$value}','{$this->getConfigKey()}'));");
+            ('$oxid', $shopId, '', '$name', '$type', '{$value}');");
     }
 
     /**
@@ -310,7 +310,7 @@ class ShopInstaller implements ShopServiceInterface
 
         $value = is_array($value) ? serialize($value) : $value;
         $value = $dbHandler->escape($value);
-        $dbHandler->query("update oxconfig set oxvarvalue = ENCODE( '{$value}','{$this->getConfigKey()}') where oxvarname = '{$id}';");
+        $dbHandler->query("update oxconfig set oxvarvalue = '{$value}' where oxvarname = '{$id}';");
     }
 
     /**
