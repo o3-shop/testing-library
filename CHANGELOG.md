@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.0.1] - 2023-03-27
+
+### Fixed
+- wrong variable exist check
+
 ## [v1.0.0] - 2023-03-05
 
 # [O3-Shop]
@@ -231,7 +236,8 @@ An example:
 
 - add helping methods markTestSkippedIfSubShop and markTestSkippedIfNoSubShopto the library/UnitTestCase
 
-[v1.0.0]: https://github.com/o3-shop/testing_library/releases/tag/v1.0.0
+[v1.0.1]: https://gitlab.o3-shop.com/o3/testing_library/-/compare/v1.0.0...v1.0.1
+[v1.0.0]: https://gitlab.o3-shop.com/o3/testing_library/-/tags/v1.0.0
 [O3-Shop]: https://www.o3-shop.com/
 [v8.1.0]: https://github.com/OXID-eSales/testing_library/compare/v8.0.2...v8.1.0
 [v8.0.2]: https://github.com/OXID-eSales/testing_library/compare/v8.0.1...v8.0.2
