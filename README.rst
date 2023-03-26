@@ -92,7 +92,7 @@ Option 2: Selecting any directory for installation (alternative way)
 
 To install testing library to any directory, you need to checkout
 testing library from Github into desired directory
-(``git clone https://github.com/o3-shop/testing_library``).
+(``git clone https://gitlab.o3-shop.com/o3/testing_library``).
 Installing this way, binaries will be accessible from
 ``testing_library/bin``.
 
@@ -329,7 +329,7 @@ Currently for acceptance testing Mink library and selenium driver is used.
 **Note:**
 
   selenium-server-standalone-jar 2.47.1 is used for testing.
-  There might be some issues with older versions `issue #13 <https://github.com/o3-shop/testing_library/issues/13>`__
+  There might be some issues with older versions `issue #13 <https://gitlab.o3-shop.com/o3/testing_library/issues/13>`__
 
 Acceptance tests should be placed under
 ``tests/acceptance`` directory and extend
