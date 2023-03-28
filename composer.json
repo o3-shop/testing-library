@@ -38,7 +38,7 @@
         "codeception/module-webdriver": "^1.1",
         "codeception/module-db": "^1.0",
         "codeception/module-filesystem": "^1.0",
-        "o3-shop/codeception-modules": "^v1.0.0",
+        "o3-shop/codeception-modules": "dev-dev-b-1.0-mysql8 as 1.0.0",
         "o3-shop/codeception-page-objects": "^v1.0.0",
         "o3-shop/developer-tools": "^1.0.0",
         "symfony/polyfill-intl-idn": "1.17.1"
