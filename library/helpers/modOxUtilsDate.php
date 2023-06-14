@@ -18,11 +18,13 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
 
+use OxidEsales\EshopCommunity\Core\UtilsDate;
+
 /**
  * Useful for defining custom time
  * @deprecated since v4.0.0
  */
-class modOxUtilsDate extends \OxidEsales\Eshop\Core\UtilsDate
+class modOxUtilsDate extends UtilsDate
 {
     /** @var string */
     protected $_sTime = null;
