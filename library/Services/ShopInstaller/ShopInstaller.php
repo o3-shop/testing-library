@@ -158,7 +158,7 @@ class ShopInstaller implements ShopServiceInterface
     public function insertDemoData()
     {
         $testConfig = new TestConfig();
-        $testDirectory = $testConfig->getEditionTestsPath($testConfig->getShopEdition());
+        $testDirectory = $testConfig->getShopTestsPath();
         $this->getDbHandler()->import($testDirectory . "/Fixtures/testdemodata.sql");
     }
 

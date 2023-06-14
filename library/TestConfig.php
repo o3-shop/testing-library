@@ -188,7 +188,7 @@ class TestConfig
      */
     public function getShopTestsPath()
     {
-        $partialPath = $this->getValue('shop_tests_path');
+        $partialPath = 'vendor/o3-shop/shop-ce/' . $this->getValue('shop_tests_path');
 
         return  $this->formFullPath($partialPath);
     }
