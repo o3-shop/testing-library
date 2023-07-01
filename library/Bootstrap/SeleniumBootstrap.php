@@ -35,7 +35,7 @@ class SeleniumBootstrap extends BootstrapBase
     {
         parent::init();
 
-        define("SHOP_EDITION", ($this->getTestConfig()->getShopEdition() == 'EE') ? 'EE' : 'PE_CE');
+        define("SHOP_EDITION", 'PE_CE');
 
         $this->prepareScreenShots();
         $this->copyTestFilesToShop();
