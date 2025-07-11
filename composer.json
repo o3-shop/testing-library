@@ -29,7 +29,7 @@
         "symfony/yaml": "^5.4",
         "incenteev/composer-parameter-handler": "~2.0",
         "symfony/dom-crawler": "^5.4",
-        "symfony/filesystem": "^5.4",
+        "symfony/filesystem": "^4.4.17",
         "o3-shop/shop-facts": "^1.0.0",
         "o3-shop/shop-unified-namespace-generator": "^1.0.0",
         "phpunit/php-code-coverage": "^9.2.3",
