@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
 use Throwable;
 
-class Printer implements TestListener
+class Printer implements ResultPrinter
 {
     use TestListenerDefaultImplementation;
 
