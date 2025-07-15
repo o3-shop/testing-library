@@ -2,13 +2,13 @@
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -20,16 +20,32 @@
 
 namespace OxidEsales\TestingLibrary;
 
-use Exception;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestListener;
+use PHPUnit\Framework\TestListenerDefaultImplementation;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit\TextUI\ResultPrinter;
+use PHPUnit\Framework\Warning;
+use Throwable;
 
-class Printer extends ResultPrinter
+class Printer implements TestListener
 {
-    /** @var int */
+    use TestListenerDefaultImplementation;
+
+    /** @var array */
     private $timeStats;
+
+    /** @var bool */
+    private $verbose;
+
+    /** @var resource */
+    private $out;
+
+    public function __construct($out = null, bool $verbose = false)
+    {
+        $this->out = $out;
+        $this->verbose = $verbose;
+    }
 
     /**
      * @param string $buffer
@@ -50,29 +66,37 @@ class Printer extends ResultPrinter
     }
 
     /**
-     * @inheritdoc
+     * An error occurred.
      */
-    public function addError(Test $test, \Throwable $throwable, float $time): void
+    public function addError(Test $test, Throwable $throwable, float $time): void
     {
         if ($this->verbose) {
             $this->write("        ERROR: '" . $throwable->getMessage() . "'\n" . $throwable->getTraceAsString());
         }
-        parent::addError($test, $throwable, $time);
     }
 
     /**
-     * @inheritdoc
+     * A failure occurred.
      */
     public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
         if ($this->verbose) {
             $this->write("        FAIL: '" . $e->getMessage() . "'\n" . $e->getTraceAsString());
         }
-        parent::addFailure($test, $e, $time);
     }
 
     /**
-     * @inheritdoc
+     * A warning occurred.
+     */
+    public function addWarning(Test $test, Warning $e, float $time): void
+    {
+        if ($this->verbose) {
+            $this->write("        WARNING: '" . $e->getMessage() . "'\n" . $e->getTraceAsString());
+        }
+    }
+
+    /**
+     * A test ended.
      */
     public function endTest(Test $test, float $time): void
     {
@@ -87,23 +111,20 @@ class Printer extends ResultPrinter
             }
             $this->timeStats['avg'] = ($t + $this->timeStats['avg'] * $this->timeStats['cnt']) / (++$this->timeStats['cnt']);
         }
-        parent::endTest($test, $time);
     }
 
     /**
-     * @inheritdoc
+     * A test suite ended.
      */
     public function endTestSuite(TestSuite $suite): void
     {
-        parent::endTestSuite($suite);
-
         if ($this->verbose) {
             $this->write("\ntime stats: min {$this->timeStats['min']}, max {$this->timeStats['max']}, avg {$this->timeStats['avg']}, slowest test: {$this->timeStats['slowest']}|\n");
         }
     }
 
     /**
-     * @inheritdoc
+     * A test suite started.
      */
     public function startTestSuite(TestSuite $suite): void
     {
@@ -112,12 +133,10 @@ class Printer extends ResultPrinter
 
             $this->timeStats = array('cnt' => 0, 'min' => 9999999, 'max' => 0, 'avg' => 0, 'startTime' => 0, 'slowest' => '_ERROR_');
         }
-
-        parent::startTestSuite($suite);
     }
 
     /**
-     * @inheritdoc
+     * A test started.
      */
     public function startTest(Test $test): void
     {
@@ -126,7 +145,5 @@ class Printer extends ResultPrinter
 
             $this->timeStats['startTime'] = microtime(true);
         }
-
-        parent::startTest($test);
     }
 }
