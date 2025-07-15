@@ -20,32 +20,16 @@
 
 namespace OxidEsales\TestingLibrary;
 
+use Exception;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;
-use PHPUnit\Framework\TestListener;
-use PHPUnit\Framework\TestListenerDefaultImplementation;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit\Framework\Warning;
-use Throwable;
+use PHPUnit\TextUI\ResultPrinter;
 
 class Printer implements ResultPrinter
 {
-    use TestListenerDefaultImplementation;
-
-    /** @var array */
+    /** @var int */
     private $timeStats;
-
-    /** @var bool */
-    private $verbose;
-
-    /** @var resource */
-    private $out;
-
-    public function __construct($out = null, bool $verbose = false)
-    {
-        $this->out = $out;
-        $this->verbose = $verbose;
-    }
 
     /**
      * @param string $buffer
@@ -66,37 +50,29 @@ class Printer implements ResultPrinter
     }
 
     /**
-     * An error occurred.
+     * @inheritdoc
      */
-    public function addError(Test $test, Throwable $throwable, float $time): void
+    public function addError(Test $test, \Throwable $throwable, float $time): void
     {
         if ($this->verbose) {
             $this->write("        ERROR: '" . $throwable->getMessage() . "'\n" . $throwable->getTraceAsString());
         }
+        parent::addError($test, $throwable, $time);
     }
 
     /**
-     * A failure occurred.
+     * @inheritdoc
      */
     public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
         if ($this->verbose) {
             $this->write("        FAIL: '" . $e->getMessage() . "'\n" . $e->getTraceAsString());
         }
+        parent::addFailure($test, $e, $time);
     }
 
     /**
-     * A warning occurred.
-     */
-    public function addWarning(Test $test, Warning $e, float $time): void
-    {
-        if ($this->verbose) {
-            $this->write("        WARNING: '" . $e->getMessage() . "'\n" . $e->getTraceAsString());
-        }
-    }
-
-    /**
-     * A test ended.
+     * @inheritdoc
      */
     public function endTest(Test $test, float $time): void
     {
@@ -111,20 +87,23 @@ class Printer implements ResultPrinter
             }
             $this->timeStats['avg'] = ($t + $this->timeStats['avg'] * $this->timeStats['cnt']) / (++$this->timeStats['cnt']);
         }
+        parent::endTest($test, $time);
     }
 
     /**
-     * A test suite ended.
+     * @inheritdoc
      */
     public function endTestSuite(TestSuite $suite): void
     {
+        parent::endTestSuite($suite);
+
         if ($this->verbose) {
             $this->write("\ntime stats: min {$this->timeStats['min']}, max {$this->timeStats['max']}, avg {$this->timeStats['avg']}, slowest test: {$this->timeStats['slowest']}|\n");
         }
     }
 
     /**
-     * A test suite started.
+     * @inheritdoc
      */
     public function startTestSuite(TestSuite $suite): void
     {
@@ -133,10 +112,12 @@ class Printer implements ResultPrinter
 
             $this->timeStats = array('cnt' => 0, 'min' => 9999999, 'max' => 0, 'avg' => 0, 'startTime' => 0, 'slowest' => '_ERROR_');
         }
+
+        parent::startTestSuite($suite);
     }
 
     /**
-     * A test started.
+     * @inheritdoc
      */
     public function startTest(Test $test): void
     {
@@ -145,5 +126,7 @@ class Printer implements ResultPrinter
 
             $this->timeStats['startTime'] = microtime(true);
         }
+
+        parent::startTest($test);
     }
 }
