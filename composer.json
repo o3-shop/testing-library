@@ -76,7 +76,7 @@
     
     "branch-alias": {
         "dev-1-fix-ssl-handling-for-new-mysqlmariadb-versions": "ssl-test-dev"
-    }
+    },
     "extra": {
         "incenteev-parameters": {
             "file": "test_config.yml",
