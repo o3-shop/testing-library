@@ -87,7 +87,7 @@ class DatabaseHandler
 
         $credentialsFile = $this->databaseDefaultsFileGenerator->generate();
         $charsetMode = $charsetMode ? $charsetMode : $this->getCharsetMode();
-        $command = 'mysql --skip-ssl --defaults-file=' . $credentialsFile . ' --skip-ssl';
+        $command = 'mysql --defaults-file=' . $credentialsFile . ' --skip-ssl';
         $command .= ' --default-character-set=' . $charsetMode;
         $command .= ' ' .escapeshellarg($this->getDbName());
         $command .= ' < ' . escapeshellarg($sqlFile);
