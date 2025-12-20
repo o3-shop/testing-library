@@ -87,7 +87,7 @@ class DatabaseHandler
 
         $credentialsFile = $this->databaseDefaultsFileGenerator->generate();
         $charsetMode = $charsetMode ? $charsetMode : $this->getCharsetMode();
-        $command = 'mysql --defaults-file=' . $credentialsFile;
+        $command = 'mysql --defaults-file=' . $credentialsFile . ' --skip-ssl';
         $command .= ' --default-character-set=' . $charsetMode;
         $command .= ' ' .escapeshellarg($this->getDbName());
         $command .= ' < ' . escapeshellarg($sqlFile);
@@ -102,7 +102,7 @@ class DatabaseHandler
     public function export($sqlFile, $tables)
     {
         $credentialsFile = $this->databaseDefaultsFileGenerator->generate();
-        $command = 'mysqldump --defaults-file=' . $credentialsFile;
+        $command = 'mysqldump --defaults-file=' . $credentialsFile . ' --skip-ssl';
         if (!empty($tables)) {
             array_map('escapeshellarg', $tables);
             $tables = ' ' . implode($tables);
