@@ -73,7 +73,10 @@ class ExceptionLogFileHelper
             throw new \OxidEsales\Eshop\Core\Exception\StandardException('File ' . $this->exceptionLogFile . ' could not be read');
         }
 
-        return $logFileContent;
+        // Strip sub-ERROR log levels so only ERROR, CRITICAL, ALERT, EMERGENCY cause failures
+        $logFileContent = preg_replace('/^.*\.(DEBUG|INFO|NOTICE|WARNING):.*\n?/m', '', $logFileContent);
+
+        return trim($logFileContent);
     }
 
     /**
