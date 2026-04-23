@@ -35,8 +35,7 @@ abstract class BaseTestCase extends TestCase
     /** @var TestConfig */
     private static $testConfig;
 
-    /** @var TestHandler */
-    protected $testLogHandler;
+    protected TestHandler $testLogHandler;
 
 
     /**
