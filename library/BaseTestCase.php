@@ -2,13 +2,13 @@
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -21,6 +21,8 @@
 namespace OxidEsales\TestingLibrary;
 
 use DateTime;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +35,8 @@ abstract class BaseTestCase extends TestCase
     /** @var TestConfig */
     private static $testConfig;
 
-    protected $exceptionLogHelper;
+    /** @var TestHandler */
+    protected $testLogHandler;
 
 
     /**
@@ -46,7 +49,7 @@ abstract class BaseTestCase extends TestCase
     public function __construct($name = null, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->exceptionLogHelper = new \OxidEsales\TestingLibrary\helpers\ExceptionLogFileHelper(OX_LOG_FILE);
+        $this->testLogHandler = new TestHandler();
     }
 
     /**
@@ -131,8 +134,11 @@ abstract class BaseTestCase extends TestCase
      */
     protected function setUp(): void
     {
+        $this->testLogHandler->clear();
+        $logger = new Logger('test', [$this->testLogHandler]);
+        \OxidEsales\Eshop\Core\Registry::set('logger', $logger);
+
         parent::setUp();
-        $this->failOnLoggedExceptions();
     }
 
     /**
@@ -140,46 +146,84 @@ abstract class BaseTestCase extends TestCase
      */
     protected function tearDown(): void
     {
-        parent::tearDown();
         $this->failOnLoggedExceptions();
+
+        parent::tearDown();
     }
 
     /**
-     * @param string $expectedExceptionClass
-     * @param string $expectedExceptionMessage
+     * Asserts that exactly one exception was logged at ERROR level, that it is an instance of
+     * the given class, and optionally that its message contains the given string.
+     * Clears the handler after the assertion.
      *
-     * @throws \OxidEsales\Eshop\Core\Exception\StandardException
+     * @param string $expectedExceptionClass  Fully-qualified class name of the expected exception.
+     * @param string $expectedExceptionMessage Optional substring expected in the exception message.
      */
-    protected function assertLoggedException($expectedExceptionClass, $expectedExceptionMessage = '')
+    protected function assertLoggedException(string $expectedExceptionClass, string $expectedExceptionMessage = ''): void
     {
-        $this->assertCount(
-            1,
-            $this->exceptionLogHelper->getParsedExceptions()
+        $errorRecords = array_filter(
+            $this->testLogHandler->getRecords(),
+            static function (array $record): bool {
+                return $record['level'] >= Logger::ERROR;
+            }
         );
 
-        $this->assertStringContainsString(
-            $expectedExceptionClass,
-            $this->exceptionLogHelper->getParsedExceptions()[0]
-        );
+        $this->assertCount(1, $errorRecords, 'Expected exactly one ERROR-level log record.');
 
-        if ($expectedExceptionMessage) {
-            $this->assertStringContainsString(
-                $expectedExceptionMessage,
-                $this->exceptionLogHelper->getParsedExceptions()[0]
-            );
+        $record = reset($errorRecords);
+
+        $exception = null;
+        foreach ($record['context'] as $contextValue) {
+            if ($contextValue instanceof \Throwable) {
+                $exception = $contextValue;
+                break;
+            }
         }
 
-        $this->exceptionLogHelper->clearExceptionLogFile();
+        $this->assertNotNull($exception, 'No Throwable found in the log record context.');
+        $this->assertInstanceOf($expectedExceptionClass, $exception);
+
+        if ($expectedExceptionMessage !== '') {
+            $this->assertStringContainsString($expectedExceptionMessage, $exception->getMessage());
+        }
+
+        $this->testLogHandler->clear();
     }
 
     /**
-     * @throws \OxidEsales\Eshop\Core\Exception\StandardException
+     * Fails the test if any ERROR-level (or higher) records are present in the log handler.
+     * Clears the handler after the check.
      */
-    protected function failOnLoggedExceptions()
+    protected function failOnLoggedExceptions(): void
     {
-        if ($exceptionLogEntries = $this->exceptionLogHelper->getExceptionLogFileContent()) {
-            $this->exceptionLogHelper->clearExceptionLogFile();
-            $this->fail('Test failed with ' . OX_LOG_FILE . ' entry:' . $exceptionLogEntries);
+        $errorRecords = array_filter(
+            $this->testLogHandler->getRecords(),
+            static function (array $record): bool {
+                return $record['level'] >= Logger::ERROR;
+            }
+        );
+
+        if (!empty($errorRecords)) {
+            $messages = array_map(
+                static function (array $record): string {
+                    return $record['message'];
+                },
+                $errorRecords
+            );
+
+            $this->testLogHandler->clear();
+            $this->fail('Test failed with logged exception(s): ' . implode('; ', $messages));
         }
+
+        $this->testLogHandler->clear();
+    }
+
+    /**
+     * Clears all records from the test log handler without triggering a failure.
+     * Use this when a logged exception is expected and already verified separately.
+     */
+    protected function clearExpectedLoggedExceptions(): void
+    {
+        $this->testLogHandler->clear();
     }
 }
