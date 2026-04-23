@@ -2164,7 +2164,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     /**
      * @throws \OxidEsales\Eshop\Core\Exception\StandardException
      */
-    protected function failOnLoggedExceptions()
+    protected function failOnLoggedExceptions(): void
     {
         if ($this->exceptionLogHelper->getExceptionLogFileContent()) {
             $this->fail();
