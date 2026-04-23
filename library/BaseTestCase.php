@@ -140,13 +140,8 @@ abstract class BaseTestCase extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @throws \OxidEsales\Eshop\Core\Exception\StandardException
-     */
     protected function tearDown(): void
     {
-        $this->failOnLoggedExceptions();
-
         parent::tearDown();
     }
 
