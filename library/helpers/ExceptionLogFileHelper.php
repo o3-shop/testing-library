@@ -69,6 +69,11 @@ class ExceptionLogFileHelper
         }
 
         $logFileContent = file_get_contents($this->exceptionLogFile);
+
+        // Strip sub-ERROR log levels so only ERROR, CRITICAL, ALERT, EMERGENCY cause failures
+        // Preliminiary fix,  until https://github.com/o3-shop/o3-shop/issues/109 is landet
+        $logFileContent = preg_replace('/^.*\.(DEBUG|INFO|NOTICE|WARNING):.*\n?/m', '', $logFileContent);
+
         if (false === $logFileContent) {
             throw new \OxidEsales\Eshop\Core\Exception\StandardException('File ' . $this->exceptionLogFile . ' could not be read');
         }
