@@ -88,6 +88,9 @@
             }
         }
     },
+    "archive": {
+        "exclude": [".next-bump"]
+    },
     "replace": {
         "oxid-esales/testing-library": "8.1.0"
     }
