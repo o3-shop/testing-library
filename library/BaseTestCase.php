@@ -37,6 +37,12 @@ abstract class BaseTestCase extends TestCase
 
     protected TestHandler $testLogHandler;
 
+    /**
+     * @deprecated Kept for backwards compatibility. Use clearExpectedLoggedExceptions() instead.
+     * @var object
+     */
+    protected $exceptionLogHelper;
+
 
     /**
      * BaseTestCase constructor.
@@ -136,6 +142,15 @@ abstract class BaseTestCase extends TestCase
         $this->testLogHandler->clear();
         $logger = new Logger('test', [$this->testLogHandler]);
         \OxidEsales\Eshop\Core\Registry::set('logger', $logger);
+
+        $handler = $this->testLogHandler;
+        $this->exceptionLogHelper = new class($handler) {
+            private TestHandler $handler;
+            public function __construct(TestHandler $h) { $this->handler = $h; }
+            public function clearExceptionLogFile(): void { $this->handler->clear(); }
+            public function getExceptionLogFileContent(): string { return ''; }
+            public function getParsedExceptions(): array { return []; }
+        };
 
         parent::setUp();
     }
