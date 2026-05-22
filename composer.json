@@ -42,7 +42,7 @@
         "o3-shop/codeception-modules": "^1.0.0",
         "o3-shop/codeception-page-objects": "^v1.0.0",
         "o3-shop/developer-tools": "^1.0.0",
-        "o3-shop/shop-ce": "^1.2",
+        "o3-shop/shop-ce": "^1.2 || dev-*",
         "symfony/polyfill-intl-idn": "1.17.1"
     },
     "bin": [
@@ -88,6 +88,9 @@
                 "partial_module_paths": "PARTIAL_MODULE_PATHS"
             }
         }
+    },
+    "archive": {
+        "exclude": [".next-bump"]
     },
     "replace": {
         "oxid-esales/testing-library": "8.1.0"
