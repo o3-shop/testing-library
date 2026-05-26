@@ -94,5 +94,10 @@
     },
     "replace": {
         "oxid-esales/testing-library": "8.1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "o3-shop/shop-unified-namespace-generator": true
+        }
     }
 }
