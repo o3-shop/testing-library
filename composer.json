@@ -97,7 +97,8 @@
     },
     "config": {
         "allow-plugins": {
-            "o3-shop/shop-unified-namespace-generator": true
+            "o3-shop/shop-unified-namespace-generator": true,
+            "o3-shop/shop-composer-plugin": true
         }
     }
 }
