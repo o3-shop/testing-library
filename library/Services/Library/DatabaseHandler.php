@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -21,10 +22,10 @@
 namespace OxidEsales\TestingLibrary\Services\Library;
 
 use Exception;
-use PDO;
-use PDOStatement;
-use PDOException;
 use OxidEsales\Eshop\Core\ConfigFile;
+use PDO;
+use PDOException;
+use PDOStatement;
 
 /**
  * Simple database connector.
@@ -64,7 +65,7 @@ class DatabaseHandler
                 $dsn,
                 $this->getDbUser(),
                 $this->getDbPassword(),
-                array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
+                [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
             );
         } catch (\PDOException $exception) {
             throw new \Exception("Could not connect to '{$this->getDbHost()}' with user '{$this->getDbUser()}'\n");
@@ -89,7 +90,7 @@ class DatabaseHandler
         $charsetMode = $charsetMode ? $charsetMode : $this->getCharsetMode();
         $command = 'mysql --defaults-file=' . $credentialsFile . ' --skip-ssl';
         $command .= ' --default-character-set=' . $charsetMode;
-        $command .= ' ' .escapeshellarg($this->getDbName());
+        $command .= ' ' . escapeshellarg($this->getDbName());
         $command .= ' < ' . escapeshellarg($sqlFile);
         $this->executeCommand($command);
         unlink($credentialsFile);
@@ -155,8 +156,8 @@ class DatabaseHandler
     public function execSql($sql)
     {
         try {
-            list ($statement) = explode(" ", ltrim($sql));
-            if (in_array(strtoupper($statement), array('SELECT', 'SHOW'))) {
+            list($statement) = explode(' ', ltrim($sql));
+            if (in_array(strtoupper($statement), ['SELECT', 'SHOW'])) {
                 $oStatement = $this->query($sql);
             } else {
                 return $this->exec($sql);
@@ -164,7 +165,7 @@ class DatabaseHandler
 
             return $oStatement;
         } catch (PDOException $e) {
-            throw new Exception("Could not execute sql: " . $sql);
+            throw new Exception('Could not execute sql: ' . $sql);
         }
     }
 
@@ -179,7 +180,7 @@ class DatabaseHandler
         try {
             $this->getDbConnection()->exec('USE `' . $this->getDbName() . '`');
         } catch (Exception $e) {
-            throw new Exception("Could not connect to database " . $this->getDbName());
+            throw new Exception('Could not connect to database ' . $this->getDbName());
         }
     }
 
@@ -261,7 +262,6 @@ class DatabaseHandler
      */
     protected function executeCommand($command)
     {
-
         try {
             CliExecutor::executeCommand($command);
         } catch (Exception $e) {

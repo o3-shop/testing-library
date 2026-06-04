@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
  * O3-Shop is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by  
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
  * O3-Shop is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -20,20 +21,19 @@
 
 namespace OxidEsales\TestingLibrary\Services\ShopInstaller;
 
-use OxidEsales\Eshop\Core\ConfigFile;
 use OxidEsales\Eshop\Core\Config;
+use OxidEsales\Eshop\Core\ConfigFile;
 use OxidEsales\Eshop\Core\Edition\EditionPathProvider;
 use OxidEsales\Eshop\Core\Edition\EditionRootPathProvider;
 use OxidEsales\Eshop\Core\Edition\EditionSelector;
-use OxidEsales\EshopCommunity\Setup\Core;
+use OxidEsales\EshopCommunity\Setup\Utilities;
 use OxidEsales\TestingLibrary\Services\Library\Cache;
+use OxidEsales\TestingLibrary\Services\Library\CliExecutor;
 use OxidEsales\TestingLibrary\Services\Library\DatabaseHandler;
 use OxidEsales\TestingLibrary\Services\Library\Request;
 use OxidEsales\TestingLibrary\Services\Library\ServiceConfig;
 use OxidEsales\TestingLibrary\Services\Library\ShopServiceInterface;
-use OxidEsales\TestingLibrary\Services\Library\CliExecutor;
 use OxidEsales\TestingLibrary\TestConfig;
-use OxidEsales\EshopCommunity\Setup\Utilities;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
@@ -77,7 +77,7 @@ class ShopInstaller implements ShopServiceInterface
     public function init($request)
     {
         if (!class_exists('\OxidEsales\EshopCommunity\Setup\Setup')) {
-            throw new \Exception("Shop Setup directory has to be present!");
+            throw new \Exception('Shop Setup directory has to be present!');
         }
 
         $cache = new Cache();
@@ -114,8 +114,8 @@ class ShopInstaller implements ShopServiceInterface
 
         $baseEditionPathProvider = new EditionPathProvider(new EditionRootPathProvider(new EditionSelector(EditionSelector::COMMUNITY)));
 
-        $dbHandler->import($baseEditionPathProvider->getDatabaseSqlDirectory() . "/database_schema.sql");
-        $dbHandler->import($baseEditionPathProvider->getDatabaseSqlDirectory() . "/initial_data.sql");
+        $dbHandler->import($baseEditionPathProvider->getDatabaseSqlDirectory() . '/database_schema.sql');
+        $dbHandler->import($baseEditionPathProvider->getDatabaseSqlDirectory() . '/initial_data.sql');
 
         $output = new ConsoleOutput();
         $output->setVerbosity(ConsoleOutputInterface::VERBOSITY_QUIET);
@@ -131,9 +131,9 @@ class ShopInstaller implements ShopServiceInterface
         $testConfig = new TestConfig();
         $vendorDir = $testConfig->getVendorDirectory();
 
-        $php = getenv('PHPBIN') ? getenv('PHPBIN') . ' ': '';
+        $php = getenv('PHPBIN') ? getenv('PHPBIN') . ' ' : '';
 
-        CliExecutor::executeCommand( $php . '"' . $vendorDir . '/bin/oe-eshop-db_views_regenerate"');
+        CliExecutor::executeCommand($php . '"' . $vendorDir . '/bin/oe-eshop-db_views_regenerate"');
     }
 
     /**
@@ -159,7 +159,7 @@ class ShopInstaller implements ShopServiceInterface
     {
         $testConfig = new TestConfig();
         $testDirectory = $testConfig->getEditionTestsPath($testConfig->getShopEdition());
-        $this->getDbHandler()->import($testDirectory . "/Fixtures/testdemodata.sql");
+        $this->getDbHandler()->import($testDirectory . '/Fixtures/testdemodata.sql');
     }
 
     /**
@@ -172,7 +172,7 @@ class ShopInstaller implements ShopServiceInterface
 
         $dbHandler->query("delete from oxconfig where oxvarname in ('iSetUtfMode','blSendTechnicalInformationToOxid');");
         $dbHandler->query(
-            "insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values " .
+            'insert into oxconfig (oxid, oxshopid, oxvarname, oxvartype, oxvarvalue) values ' .
             "('config1', '{$sShopId}', 'iSetUtfMode',       'str',  '0' )," .
             "('config2', '{$sShopId}', 'blSendTechnicalInformationToOxid', 'bool', '1' )"
         );
@@ -191,7 +191,7 @@ class ShopInstaller implements ShopServiceInterface
                        WHERE oxvartype IN ('str', 'arr', 'aarr')"
         );
 
-        while ( (false !== $rs) && ($aRow = $rs->fetch())) {
+        while ((false !== $rs) && ($aRow = $rs->fetch())) {
             if ($aRow['oxvartype'] == 'arr' || $aRow['oxvartype'] == 'aarr') {
                 $aRow['oxvarvalue'] = unserialize($aRow['oxvarvalue']);
             }
@@ -323,7 +323,7 @@ class ShopInstaller implements ShopServiceInterface
     private function stringToUtf($input)
     {
         if (is_array($input)) {
-            $temp = array();
+            $temp = [];
             foreach ($input as $key => $value) {
                 $temp[$this->stringToUtf($key)] = $this->stringToUtf($value);
             }

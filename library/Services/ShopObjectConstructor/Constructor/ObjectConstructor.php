@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -17,6 +18,7 @@
  * @copyright  Copyright (c) 2022 O3-Shop (https://www.o3-shop.com)
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
+
 namespace OxidEsales\TestingLibrary\Services\ShopObjectConstructor\Constructor;
 
 use Exception;
@@ -59,7 +61,7 @@ class ObjectConstructor
     public function load($objectId)
     {
         if (!empty($objectId)) {
-            $blResult = is_array($objectId)? $this->_loadByArray($objectId) : $this->_loadById($objectId);
+            $blResult = is_array($objectId) ? $this->_loadByArray($objectId) : $this->_loadById($objectId);
             if ($blResult === false) {
                 $sClass = get_class($this->getObject());
                 throw new Exception("Failed to load $sClass with id $objectId");
@@ -110,7 +112,7 @@ class ObjectConstructor
     {
         $object = $this->getObject();
         $tableName = $object->getCoreTableName();
-        $values = array();
+        $values = [];
         foreach ($classParams as $sParamKey => $paramValue) {
             if (is_int($sParamKey)) {
                 $fieldName = $this->_getFieldName($tableName, $paramValue);
@@ -137,8 +139,8 @@ class ObjectConstructor
      */
     public function callFunction($functionName, $parameters)
     {
-        $parameters = is_array($parameters) ? $parameters : array();
-        $response = call_user_func_array(array($this->getObject(), $functionName), $parameters);
+        $parameters = is_array($parameters) ? $parameters : [];
+        $response = call_user_func_array([$this->getObject(), $functionName], $parameters);
 
         return $response;
     }
@@ -181,7 +183,7 @@ class ObjectConstructor
         $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
 
         $tableName = $this->getObject()->getCoreTableName();
-        $query = 'SELECT OXID FROM '. $tableName .' ORDER BY OXTIMESTAMP DESC LIMIT 1';
+        $query = 'SELECT OXID FROM ' . $tableName . ' ORDER BY OXTIMESTAMP DESC LIMIT 1';
         $result = $oDb->select($query);
 
         if ($result != false && $result->count() > 0) {

@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -17,10 +18,10 @@
  * @copyright  Copyright (c) 2022 O3-Shop (https://www.o3-shop.com)
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
+
 namespace OxidEsales\TestingLibrary\Services\Library\DatabaseRestorer;
 
 use OxidEsales\TestingLibrary\Services\Library\DatabaseHandler;
-
 
 /**
  * Database maintenance class responsible complete for backuping and restoration of test database.
@@ -81,7 +82,7 @@ class DatabaseRestorerToFile implements DatabaseRestorerInterface
         foreach ($tables as $table) {
             $databaseHandler = $this->getDatabaseHandler();
             $directory = $this->getDumpDirectory();
-            $databaseHandler->export($directory . '/' . $table . '.sql', array($table));
+            $databaseHandler->export($directory . '/' . $table . '.sql', [$table]);
         }
         $this->saveChecksum($this->getTableChecksum($tables));
     }
@@ -160,7 +161,7 @@ class DatabaseRestorerToFile implements DatabaseRestorerInterface
         $dumpName = $this->getDumpName();
         $checksum = $this->getChecksum();
 
-        return array_key_exists($dumpName, $checksum)? $checksum[$dumpName] : array();
+        return array_key_exists($dumpName, $checksum) ? $checksum[$dumpName] : [];
     }
 
     /**
@@ -169,10 +170,10 @@ class DatabaseRestorerToFile implements DatabaseRestorerInterface
     protected function getChecksum()
     {
         if (!$this->checksum) {
-            $this->checksum = array();
+            $this->checksum = [];
             $dumpDirectory = $this->getDumpDirectory();
-            if (file_exists($dumpDirectory.'/checksums.txt')) {
-                $this->checksum = unserialize(file_get_contents($dumpDirectory.'/checksums.txt'));
+            if (file_exists($dumpDirectory . '/checksums.txt')) {
+                $this->checksum = unserialize(file_get_contents($dumpDirectory . '/checksums.txt'));
             }
         }
 
@@ -192,7 +193,7 @@ class DatabaseRestorerToFile implements DatabaseRestorerInterface
         $allChecksum[$dumpName] = $dumpChecksum;
         $this->checksum = $allChecksum;
 
-        file_put_contents($dumpDirectory.'/checksums.txt', serialize($allChecksum));
+        file_put_contents($dumpDirectory . '/checksums.txt', serialize($allChecksum));
     }
 
     /**
@@ -204,13 +205,13 @@ class DatabaseRestorerToFile implements DatabaseRestorerInterface
      */
     private function getTableChecksum($tables)
     {
-        $tables = is_array($tables) ? $tables : array($tables);
+        $tables = is_array($tables) ? $tables : [$tables];
         $database = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
-        $select = 'CHECKSUM TABLE ' . implode(", ", $tables);
+        $select = 'CHECKSUM TABLE ' . implode(', ', $tables);
         $results = $database->getAll($select);
 
         $sDbName = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\ConfigFile::class)->getVar('dbName');
-        $checksum = array();
+        $checksum = [];
         foreach ($results as $result) {
             $table = str_replace($sDbName . '.', '', $result['Table']);
             $checksum[$table] = $result['Checksum'];
@@ -227,7 +228,7 @@ class DatabaseRestorerToFile implements DatabaseRestorerInterface
     private function getDbTables()
     {
         $database = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_NUM);
-        $tables = $database->getCol("SHOW TABLES");
+        $tables = $database->getCol('SHOW TABLES');
 
         foreach ($tables as $key => $table) {
             if (strpos($table, 'oxv_') === 0) {

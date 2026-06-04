@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * This file is part of O3-Shop Testing library.
  *
@@ -44,7 +46,7 @@ class DatabaseDefaultsFileGenerator
     {
         $file = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('testing_lib', true) . '.cnf';
         $resource = fopen($file, 'w');
-        $fileContents = "[client]"
+        $fileContents = '[client]'
             . "\nuser=" . $this->config->dbUser
             . "\npassword=" . $this->config->dbPwd
             . "\nhost=" . $this->config->dbHost

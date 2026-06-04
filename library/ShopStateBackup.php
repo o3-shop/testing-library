@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
@@ -19,7 +20,6 @@
  */
 
 namespace OxidEsales\TestingLibrary;
-
 
 require_once TEST_LIBRARY_HELPERS_PATH . 'oxArticleHelper.php';
 require_once TEST_LIBRARY_HELPERS_PATH . 'oxSeoEncoderHelper.php';
@@ -57,7 +57,7 @@ class ShopStateBackup
      */
     public function backupRegistry()
     {
-        $this->registryCache = array();
+        $this->registryCache = [];
         foreach (\OxidEsales\Eshop\Core\Registry::getKeys() as $class) {
             $instance = \OxidEsales\Eshop\Core\Registry::get($class);
             $this->registryCache[$class] = clone $instance;
@@ -71,7 +71,7 @@ class ShopStateBackup
     {
         $aRegKeys = \OxidEsales\Eshop\Core\Registry::getKeys();
 
-        $aSkippedClasses = array();
+        $aSkippedClasses = [];
 
         foreach ($aRegKeys as $sKey) {
             if (!in_array($sKey, $aSkippedClasses)) {

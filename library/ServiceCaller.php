@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -20,10 +21,10 @@
 
 namespace OxidEsales\TestingLibrary;
 
+use OxidEsales\TestingLibrary\Services\Files\ChangeExceptionLogRights;
 use OxidEsales\TestingLibrary\Services\Library\Request;
 use OxidEsales\TestingLibrary\Services\Library\ServiceConfig;
 use OxidEsales\TestingLibrary\Services\ServiceFactory;
-use OxidEsales\TestingLibrary\Services\Files\ChangeExceptionLogRights;
 
 /**
  * Class for calling services. Services must already exist in shop.
@@ -31,7 +32,7 @@ use OxidEsales\TestingLibrary\Services\Files\ChangeExceptionLogRights;
 class ServiceCaller
 {
     /** @var array Service parameters. Will be passed to service. */
-    private $parameters = array();
+    private $parameters = [];
 
     /** @var TestConfig */
     private $config;
@@ -102,7 +103,7 @@ class ServiceCaller
             $response = $this->callLocalService($serviceName);
         }
 
-        $this->parameters = array();
+        $this->parameters = [];
 
         return $response;
     }
@@ -179,7 +180,7 @@ class ServiceCaller
     {
         $fileCopier = new FileCopier();
         $target = $this->getTestConfig()->getRemoteDirectory() . '/Services';
-        $fileCopier->copyFiles(TEST_LIBRARY_PATH.'/Services', $target, true);
+        $fileCopier->copyFiles(TEST_LIBRARY_PATH . '/Services', $target, true);
     }
 
     /**

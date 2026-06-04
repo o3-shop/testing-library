@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -65,7 +66,7 @@ class TestConfig
     /**
      * Ensure that the edition specific unified namespace classes are properly generated.
      */
-    static public function prepareUnifiedNamespaceClasses()
+    public static function prepareUnifiedNamespaceClasses()
     {
         $facts = new \OxidEsales\Facts\Facts();
         $unifiedNameSpaceClassMapProvider = new \OxidEsales\UnifiedNameSpaceGenerator\UnifiedNameSpaceClassMapProvider($facts);
@@ -226,7 +227,7 @@ class TestConfig
      */
     public function getAdditionalTestPaths()
     {
-        $testsPaths = array();
+        $testsPaths = [];
         $parsedConfigOptionValue = $this->parseMultipleValues('additional_test_paths');
         foreach ($parsedConfigOptionValue as $partialTestsPath) {
             $fullPath = $this->formFullPath($partialTestsPath);
@@ -245,15 +246,15 @@ class TestConfig
      */
     public function getModulesToActivate()
     {
-        $modulesToActivate = array();
+        $modulesToActivate = [];
 
         if ($this->shouldActivateAllModules()) {
             $modulesToActivate = $this->getPartialModulePaths();
         } else {
             $current = $this->getCurrentTestSuite();
-            $modulesDir = $this->getShopPath() .'modules/';
+            $modulesDir = $this->getShopPath() . 'modules/';
             foreach ($this->getPartialModulePaths() as $module) {
-                $fullPath = rtrim($modulesDir . $module, '/') .'/';
+                $fullPath = rtrim($modulesDir . $module, '/') . '/';
                 if (strpos($current, $fullPath) === 0) {
                     $modulesToActivate[] = $module;
                     break;
@@ -361,7 +362,7 @@ class TestConfig
     public function getTempDirectory()
     {
         if (is_null($this->tempDirectory)) {
-            $this->tempDirectory = rtrim($this->getValue('tmp_path'), '/').'/';
+            $this->tempDirectory = rtrim($this->getValue('tmp_path'), '/') . '/';
         }
 
         return $this->tempDirectory;
@@ -475,7 +476,7 @@ class TestConfig
             $currentSuite = getenv('TEST_SUITE');
             if (!$currentSuite) {
                 $testSuites = $this->getTestSuites();
-                $testFilePath = implode(",", $_SERVER['argv']);
+                $testFilePath = implode(',', $_SERVER['argv']);
                 foreach ($testSuites as $suite) {
                     if (strpos($testFilePath, realpath($suite)) !== false) {
                         $currentSuite = $suite;
@@ -510,7 +511,7 @@ class TestConfig
      */
     public function getModuleTestSuites()
     {
-        $testSuitePaths = array();
+        $testSuitePaths = [];
         if ($this->shouldRunModuleTests()) {
             foreach ($this->getPartialModulePaths() as $module) {
                 $testSuitePath = $this->getTestSuitePath($module);
@@ -551,11 +552,11 @@ class TestConfig
      */
     protected function getConfigFile()
     {
-        if (class_exists('oxRegistry') || class_exists(\OxidEsales\Eshop\Core\Registry::Class)) {
+        if (class_exists('oxRegistry') || class_exists(\OxidEsales\Eshop\Core\Registry::class)) {
             $configFile = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\ConfigFile::class);
         } else {
             $shopPath = $this->getShopPath();
-            $configFile = new \OxidEsales\Eshop\Core\ConfigFile($shopPath . "config.inc.php");
+            $configFile = new \OxidEsales\Eshop\Core\ConfigFile($shopPath . 'config.inc.php');
         }
 
         return $configFile;
@@ -589,11 +590,11 @@ class TestConfig
     private function findShopPath($relativeShopPath)
     {
         $vendorBaseDir = $this->getVendorDirectory();
-        $availablePaths = array(
-            $vendorBaseDir .'../', // When vendor directory is in shop base directory
-            $vendorBaseDir .'../../../', // When vendor directory is in /shop/dir/modules/testmodule/ directory
-            $vendorBaseDir .'../../../../', // When vendor directory is in /shop/dir/modules/company/testmodule/ directory
-        );
+        $availablePaths = [
+            $vendorBaseDir . '../', // When vendor directory is in shop base directory
+            $vendorBaseDir . '../../../', // When vendor directory is in /shop/dir/modules/testmodule/ directory
+            $vendorBaseDir . '../../../../', // When vendor directory is in /shop/dir/modules/company/testmodule/ directory
+        ];
 
         $shopPath = '';
         foreach ($availablePaths as $path) {
@@ -603,7 +604,7 @@ class TestConfig
             }
         }
 
-        return $shopPath ? $shopPath : $vendorBaseDir .'../'. $relativeShopPath;
+        return $shopPath ? $shopPath : $vendorBaseDir . '../' . $relativeShopPath;
     }
 
     /**
@@ -613,7 +614,7 @@ class TestConfig
      */
     private function getConfigFileName()
     {
-        return $this->getVendorDirectory() ."../test_config.yml";
+        return $this->getVendorDirectory() . '../test_config.yml';
     }
 
     /**
@@ -639,7 +640,7 @@ class TestConfig
      */
     private function parseMultipleValues($configOptionName)
     {
-        $multipleValues = array();
+        $multipleValues = [];
         if ($valueSeparatedComma = $this->getValue($configOptionName)) {
             $multipleValues = explode(',', $valueSeparatedComma);
         }

@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -22,10 +24,10 @@ namespace OxidEsales\TestingLibrary\Services\ProjectConfiguration;
 
 use OxidEsales\TestingLibrary\Helper\ProjectConfigurationHelper;
 use OxidEsales\TestingLibrary\Services\Library\Exception\FileNotFoundException;
-use OxidEsales\TestingLibrary\Services\Library\Request;
-use OxidEsales\TestingLibrary\Services\Library\ShopServiceInterface;
 use OxidEsales\TestingLibrary\Services\Library\ProjectConfigurationHandler;
+use OxidEsales\TestingLibrary\Services\Library\Request;
 use OxidEsales\TestingLibrary\Services\Library\ServiceConfig;
+use OxidEsales\TestingLibrary\Services\Library\ShopServiceInterface;
 
 /**
  * @deprecated 7.3.0
@@ -65,7 +67,8 @@ class ProjectConfiguration implements ShopServiceInterface
         if ($request->getParameter('cleanup')) {
             try {
                 $this->projectConfiguration->cleanup();
-            } catch (FileNotFoundException $exception) {}
+            } catch (FileNotFoundException $exception) {
+            }
         }
     }
 }

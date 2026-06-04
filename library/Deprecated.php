@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
  * O3-Shop is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by  
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
  * O3-Shop is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -34,7 +35,6 @@ class OxidTestCase extends OxidEsales\TestingLibrary\UnitTestCase
  */
 class oxUnitTestCase extends OxidEsales\TestingLibrary\UnitTestCase
 {
-
 }
 
 /**
@@ -55,7 +55,7 @@ class oxAcceptanceTestCase extends OxidEsales\TestingLibrary\AcceptanceTestCase
 {
 }
 
-use \OxidEsales\Eshop\Core\UtilsObject;
+use OxidEsales\Eshop\Core\UtilsObject;
 
 /**
  * adds new module to specified class
@@ -85,7 +85,7 @@ use \OxidEsales\Eshop\Core\UtilsObject;
 function oxAddClassModule($sModuleClass, $sClass, $prependStrategy = false)
 {
     $oFactory = new \OxidEsales\Eshop\Core\UtilsObject();
-    $aModules = $oFactory->getModuleVar("aModules");
+    $aModules = $oFactory->getModuleVar('aModules');
 
     //unset _possible_ registry instance
     \OxidEsales\Eshop\Core\Registry::set($sClass, null);
@@ -97,7 +97,7 @@ function oxAddClassModule($sModuleClass, $sClass, $prependStrategy = false)
     }
     $aModules[strtolower($sClass)] = $sModuleClass;
 
-    $oFactory->setModuleVar("aModules", $aModules);
+    $oFactory->setModuleVar('aModules', $aModules);
 }
 
 /**
@@ -111,10 +111,10 @@ function oxRemClassModule($sModuleClass, $sClass = '')
     \OxidEsales\Eshop\Core\Registry::set($sClass, null);
 
     $oFactory = new \OxidEsales\Eshop\Core\UtilsObject();
-    $aModules = $oFactory->getModuleVar("aModules");
+    $aModules = $oFactory->getModuleVar('aModules');
 
     if (!$aModules) {
-        $aModules = array();
+        $aModules = [];
     }
 
     if ($sClass) {
@@ -124,7 +124,7 @@ function oxRemClassModule($sModuleClass, $sClass = '')
             unset($aModules[$sKey]);
         }
     }
-    $oFactory->setModuleVar("aModules", $aModules);
+    $oFactory->setModuleVar('aModules', $aModules);
 }
 
 /**
@@ -134,8 +134,7 @@ function oxRemClassModule($sModuleClass, $sClass = '')
  */
 class oxTestModules
 {
-
-    private static $_addedmods = array();
+    private static $_addedmods = [];
 
     private static function _getNextName($sOrig)
     {
@@ -169,7 +168,7 @@ class oxTestModules
         } else {
             $last = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->getClassName(strtolower($class));
         }
-        eval ("class $name extends $last { $access \$$varName = $default;}");
+        eval("class $name extends $last { $access \$$varName = $default;}");
         oxAddClassModule($name, $class);
         self::$_addedmods[$class][] = $name;
     }
@@ -200,7 +199,7 @@ class oxTestModules
                 $last = \OxidEsales\Eshop\Core\Registry::get(\OxidEsales\Eshop\Core\UtilsObject::class)->getClassName(strtolower($class));
             }
             if (preg_match('/^{.*}$/ms', $func)) {
-                $sCode = "\$aA = func_get_args(); " . trim($func, '{}');
+                $sCode = '$aA = func_get_args(); ' . trim($func, '{}');
             } else {
                 if (preg_match('/^[a-z0-9_-]*$/i', trim($func))) {
                     $func = "'$func'";
@@ -208,7 +207,7 @@ class oxTestModules
                 $sCode = " \$arg = func_get_args(); return call_user_func_array($func, \$arg);";
             }
 
-            $aFncParams = array();
+            $aFncParams = [];
             if (strpos($fncName, '(') !== false) {
                 $aMatches = null;
                 preg_match("@(.*?)\((.*?)\)$@", trim($fncName), $aMatches);
@@ -217,7 +216,7 @@ class oxTestModules
                 if (trim($aMatches[2])) {
                     $aFncParams = explode(',', $aMatches[2]);
                 } else {
-                    $aFncParams = array();
+                    $aFncParams = [];
                 }
             }
 
@@ -227,8 +226,7 @@ class oxTestModules
 
                 $fncName .= '(';
                 $blFirst = true;
-                foreach ($aMethodParams AS $iKey => $oParam) {
-
+                foreach ($aMethodParams as $iKey => $oParam) {
                     if (!$blFirst) {
                         $fncName .= ', ';
                     } else {
@@ -262,7 +260,7 @@ class oxTestModules
                 }
             }
 
-            eval ("class $name extends $last { function $fncName { $sCode }}");
+            eval("class $name extends $last { function $fncName { $sCode }}");
             oxAddClassModule($name, $class);
 
             self::$_addedmods[$class][] = $name;
@@ -280,7 +278,7 @@ class oxTestModules
      *
      * @var array
      */
-    protected static $_aModuleMap = array();
+    protected static $_aModuleMap = [];
     protected static $_oOrigOxUtilsObj = null;
 
     /**
@@ -320,12 +318,12 @@ class oxTestModules
      */
     public static function cleanUp()
     {
-        self::$_aModuleMap = array();
+        self::$_aModuleMap = [];
         self::$_oOrigOxUtilsObj = null;
         foreach (self::$_addedmods as $class => $arr) {
             oxRemClassModule('allmods', $class);
         }
-        self::$_addedmods = array();
+        self::$_addedmods = [];
     }
 
     /**
@@ -333,7 +331,7 @@ class oxTestModules
      */
     public static function cleanAllModules()
     {
-        \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('aModules', array());
+        \OxidEsales\Eshop\Core\Registry::getConfig()->setConfigParam('aModules', []);
     }
 }
 
@@ -367,7 +365,7 @@ class oxTestsStaticCleaner
     {
         $sNewCl = self::_getChildClass($sClass);
         if (!class_exists($sNewCl)) {
-            eval ("class $sNewCl extends $sClass { public function __construct(){} public function __cleaner(\$sProperty) { $sClass::\${\$sProperty}=null; }}");
+            eval("class $sNewCl extends $sClass { public function __construct(){} public function __cleaner(\$sProperty) { $sClass::\${\$sProperty}=null; }}");
         }
         $o = new $sNewCl();
         $o->__cleaner($sProperty);
@@ -406,10 +404,10 @@ class oxTestsStaticCleaner
  */
 abstract class modOXID
 {
-    protected $_takeover = array();
-    protected $_checkover = array();
-    protected $_vars = array();
-    protected $_params = array();
+    protected $_takeover = [];
+    protected $_checkover = [];
+    protected $_vars = [];
+    protected $_params = [];
     protected $_oRealInstance = null;
 
     public function getRealInstance()
@@ -424,10 +422,10 @@ abstract class modOXID
 
     public function cleanup()
     {
-        $this->_takeover = array();
-        $this->_checkover = array();
-        $this->_vars = array();
-        $this->_params = array();
+        $this->_takeover = [];
+        $this->_checkover = [];
+        $this->_vars = [];
+        $this->_params = [];
     }
 
     public static function globalCleanup()
@@ -488,7 +486,7 @@ abstract class modOXID
                 call_user_func_array($this->_checkover[$funca], $var);
             }
 
-            return call_user_func_array(array($this->_oRealInstance, $func), $var);
+            return call_user_func_array([$this->_oRealInstance, $func], $var);
         }
     }
 
@@ -546,7 +544,7 @@ class modDB extends modOXID
     public static $unitMOD = null;
     protected static $_inst = null;
 
-    function modAttach($oObj = null)
+    public function modAttach($oObj = null)
     {
         parent::modAttach();
         $this->_oRealInstance = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
@@ -554,10 +552,12 @@ class modDB extends modOXID
             $oObj = $this;
         }
         self::$unitMOD = $oObj;
-        $this->addClassFunction('getDB', function () {return modDB::$unitMOD;});
+        $this->addClassFunction('getDB', function () {
+            return modDB::$unitMOD;
+        });
     }
 
-    static function getInstance()
+    public static function getInstance()
     {
         if (!self::$_inst) {
             self::$_inst = new modDB();
@@ -617,17 +617,16 @@ if (!function_exists('findphp')) {
      * @return array
      * @deprecated since v4.0.0
      */
-    function findphp($baseDir, $aDirBlackList = array(), $aFileBlackList = array(), $aFileWhiteList = array())
+    function findphp($baseDir, $aDirBlackList = [], $aFileBlackList = [], $aFileWhiteList = [])
     {
         $baseDir = preg_replace('#/$#', '', $baseDir);
         $baseDir = replaceDirSeperator($baseDir);
 
-        $dirs = array($baseDir);
+        $dirs = [$baseDir];
 
         preparePathArray($aDirBlackList, $baseDir);
         preparePathArray($aFileBlackList, $baseDir);
         preparePathArray($aFileWhiteList, $baseDir);
-
 
         //get directories (do not go to blacklist)
         foreach ($dirs as $dir) {
@@ -639,16 +638,16 @@ if (!function_exists('findphp')) {
         }
 
         // get PHP files form directories
-        $aFiles = array();
+        $aFiles = [];
         foreach ($dirs as $dir) {
-            $aFiles = array_merge($aFiles, glob($dir . DIRECTORY_SEPARATOR . "*.php", GLOB_NOSORT));
+            $aFiles = array_merge($aFiles, glob($dir . DIRECTORY_SEPARATOR . '*.php', GLOB_NOSORT));
         }
 
         //remove files existing in file blacklist
         foreach ($aFileBlackList as $sFile) {
             $iNR = array_search($sFile, $aFiles);
             if ($iNR !== false) {
-                unset ($aFiles[$iNR]);
+                unset($aFiles[$iNR]);
             }
         }
         // add files from white list
@@ -686,11 +685,10 @@ if (!function_exists('stripCodeLines')) {
             throw new Exception("\n" . 'File "' . $sFile . '" does not exists, skipping');
         }
 
-
         $sFileContentMD5 = md5_file($sFile);
-        $sCCFileName = $sCCarrayDir . md5($sFile) . "." . $sFileContentMD5;
+        $sCCFileName = $sCCarrayDir . md5($sFile) . '.' . $sFileContentMD5;
         // delete unneeded files
-        $aArray = glob($sCCarrayDir . md5($sFile) . ".*");
+        $aArray = glob($sCCarrayDir . md5($sFile) . '.*');
         $blFound = false;
         if (count($aArray)) {
             while ($aArray) {
@@ -732,7 +730,7 @@ if (!function_exists('stripCodeLines')) {
 
             $aFile = preg_replace('#^$#m', '0', $aFile);
             $aFile = str_replace("\n", '', $aFile);
-            $aCC = array();
+            $aCC = [];
             for ($i = 0; $i < strlen($aFile); $i++) {
                 if ($aFile[$i] === '1') {
                     $aCC[$i + 1] = -1;

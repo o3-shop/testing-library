@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -68,7 +69,7 @@ class FileCopierTest extends PHPUnit\Framework\TestCase
 
         /** @var FileCopier|PHPUnit\Framework\MockObject\MockObject $fileCopier */
         $fileCopier = $this->getMockBuilder('\OxidEsales\TestingLibrary\FileCopier')
-            ->setMethods(array('executeCommand'))
+            ->setMethods(['executeCommand'])
             ->getMock();
         $fileCopier->expects($this->once())->method('executeCommand')->with($this->equalTo($expectedCommand));
 
@@ -77,9 +78,9 @@ class FileCopierTest extends PHPUnit\Framework\TestCase
 
     public function testEmptyDirectoryCreationWhenDirectoryDoesNotExist()
     {
-        $structure = array(
-            'testDirectory' => array()
-        );
+        $structure = [
+            'testDirectory' => [],
+        ];
 
         vfsStream::setup('root', 777, $structure);
 
@@ -94,17 +95,17 @@ class FileCopierTest extends PHPUnit\Framework\TestCase
 
     public function testEmptyDirectoryCreationWhenDirectoryExist()
     {
-        $structure = array(
-            'testDirectory' => array(
-                'nonEmptyDirectory' => array(
+        $structure = [
+            'testDirectory' => [
+                'nonEmptyDirectory' => [
                     'someFile.php' => 'content',
                     'someFile2.php' => 'content',
-                    'directory' => array(
-                        'someFile' => 'content'
-                    )
-                )
-            )
-        );
+                    'directory' => [
+                        'someFile' => 'content',
+                    ],
+                ],
+            ],
+        ];
 
         vfsStream::setup('root', 777, $structure);
 

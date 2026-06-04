@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -20,10 +21,10 @@
 
 namespace OxidEsales\TestingLibrary\Bootstrap;
 
-use OxidEsales\TestingLibrary\TestConfig;
 use OxidEsales\TestingLibrary\FileCopier;
-use OxidEsales\TestingLibrary\ServiceCaller;
 use OxidEsales\TestingLibrary\helpers\ExceptionLogFileHelper;
+use OxidEsales\TestingLibrary\ServiceCaller;
+use OxidEsales\TestingLibrary\TestConfig;
 
 abstract class BootstrapBase
 {
@@ -94,7 +95,7 @@ abstract class BootstrapBase
         $testConfig = $this->getTestConfig();
 
         $shopPath = $testConfig->getShopPath();
-        require_once $shopPath .'bootstrap.php';
+        require_once $shopPath . 'bootstrap.php';
 
         $tempDirectory = $testConfig->getTempDirectory();
         if ($tempDirectory && $tempDirectory != '/') {
@@ -139,13 +140,13 @@ abstract class BootstrapBase
             $fileCopier = new FileCopier();
             $remoteDirectory = $config->getRemoteDirectory();
             $shopDirectory = $remoteDirectory ? $remoteDirectory : $config->getShopPath();
-            $fileCopier->copyFiles($setupPath, $shopDirectory.'/Setup/');
+            $fileCopier->copyFiles($setupPath, $shopDirectory . '/Setup/');
         }
 
         try {
             $serviceCaller->callService('ShopInstaller');
         } catch (\Exception $e) {
-            exit("Failed to install shop with message: " . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
+            exit('Failed to install shop with message: ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
     }
 

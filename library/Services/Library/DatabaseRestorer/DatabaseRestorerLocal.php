@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -17,10 +18,10 @@
  * @copyright  Copyright (c) 2022 O3-Shop (https://www.o3-shop.com)
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
+
 namespace OxidEsales\TestingLibrary\Services\Library\DatabaseRestorer;
 
 use OxidEsales\TestingLibrary\Services\Library\FileHandler;
-
 
 /**
  * Database maintenance class responsible complete for backuping and restoration of test database.
@@ -34,7 +35,7 @@ class DatabaseRestorerLocal implements DatabaseRestorerInterface
     private $tmpFilePath = null;
 
     /** @var array Dump of the original db */
-    private $checksum = array();
+    private $checksum = [];
 
     /** @var string Dump name */
     private $dumpName = 'test';
@@ -138,7 +139,7 @@ class DatabaseRestorerLocal implements DatabaseRestorerInterface
             return;
         }
 
-        $file = $this->getDumpFolderPath() .'/'. $table ."_dump.sql";
+        $file = $this->getDumpFolderPath() . '/' . $table . '_dump.sql';
 
         if (file_exists($file)) {
             $database = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster();
@@ -170,7 +171,7 @@ class DatabaseRestorerLocal implements DatabaseRestorerInterface
         if (is_null($this->tmpFilePath)) {
             $dumpName = $this->getDumpName();
             $databaseName = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('dbName');
-            $this->tmpFilePath = $this->tempDirectory . '/' . $databaseName . '_dbdump/'. $dumpName .'/';
+            $this->tmpFilePath = $this->tempDirectory . '/' . $databaseName . '_dbdump/' . $dumpName . '/';
             $this->getFileHandler()->createDirectory($this->tmpFilePath);
         }
 
@@ -197,13 +198,13 @@ class DatabaseRestorerLocal implements DatabaseRestorerInterface
      */
     private function getTableChecksum($tables)
     {
-        $tables = is_array($tables) ? $tables : array($tables);
+        $tables = is_array($tables) ? $tables : [$tables];
         $database = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
-        $query = 'CHECKSUM TABLE ' . implode(", ", $tables);
+        $query = 'CHECKSUM TABLE ' . implode(', ', $tables);
         $results = $database->getAll($query);
 
         $databaseName = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('dbName');
-        $checksum = array();
+        $checksum = [];
         foreach ($results as $result) {
             $table = str_replace($databaseName . '.', '', $result['Table']);
             $checksum[$table] = $result['Checksum'];
@@ -220,7 +221,7 @@ class DatabaseRestorerLocal implements DatabaseRestorerInterface
     private function getDbTables()
     {
         $database = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_NUM);
-        $tables = $database->getCol("SHOW TABLES");
+        $tables = $database->getCol('SHOW TABLES');
 
         foreach ($tables as $key => $table) {
             if (strpos($table, 'oxv_') === 0) {

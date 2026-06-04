@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -42,9 +43,8 @@ class oxDatabaseHelper
     {
         $columns = $this->database->metaColumns($tableName);
 
-        foreach($columns as $column) {
+        foreach ($columns as $column) {
             if ($column->name === $fieldName) {
-
                 return $column;
             }
         }
@@ -61,7 +61,7 @@ class oxDatabaseHelper
             $generator = oxNew(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
             $tableNameView = $generator->getViewName($tableName, 0);
 
-            $this->database->execute("DROP VIEW " . $this->database->quoteIdentifier($tableNameView));
+            $this->database->execute('DROP VIEW ' . $this->database->quoteIdentifier($tableNameView));
         }
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
@@ -31,7 +32,6 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class BaseTestCase extends TestCase
 {
-
     /** @var TestConfig */
     private static $testConfig;
 
@@ -43,7 +43,6 @@ abstract class BaseTestCase extends TestCase
      */
     protected $exceptionLogHelper;
 
-
     /**
      * BaseTestCase constructor.
      *
@@ -51,7 +50,7 @@ abstract class BaseTestCase extends TestCase
      * @param array  $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->testLogHandler = new TestHandler();
@@ -144,12 +143,24 @@ abstract class BaseTestCase extends TestCase
         \OxidEsales\Eshop\Core\Registry::set('logger', $logger);
 
         $handler = $this->testLogHandler;
-        $this->exceptionLogHelper = new class($handler) {
+        $this->exceptionLogHelper = new class ($handler) {
             private TestHandler $handler;
-            public function __construct(TestHandler $h) { $this->handler = $h; }
-            public function clearExceptionLogFile(): void { $this->handler->clear(); }
-            public function getExceptionLogFileContent(): string { return ''; }
-            public function getParsedExceptions(): array { return []; }
+            public function __construct(TestHandler $h)
+            {
+                $this->handler = $h;
+            }
+            public function clearExceptionLogFile(): void
+            {
+                $this->handler->clear();
+            }
+            public function getExceptionLogFileContent(): string
+            {
+                return '';
+            }
+            public function getParsedExceptions(): array
+            {
+                return [];
+            }
         };
 
         parent::setUp();

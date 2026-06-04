@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -279,7 +280,7 @@ abstract class MinkWrapper extends BaseTestCase
         if (strpos($sSelector, '/') === false) {
             $page = $this->getMinkSession()->getPage();
             $sParsedSelector = $oSelectorsHandler->xpathLiteral($sSelector);
-            $oSelect = $page->find('named', array('select', $sParsedSelector));
+            $oSelect = $page->find('named', ['select', $sParsedSelector]);
         }
 
         if (is_null($oSelect)) {
@@ -290,14 +291,14 @@ abstract class MinkWrapper extends BaseTestCase
             $iIndex = str_replace('index=', '', $sOptionSelector);
             $sOptionSelector = $this->_getSelectOptionByIndex($oSelect, $iIndex);
         } else {
-            $sOptionSelector = str_replace(array('label=', 'value='), '', $sOptionSelector);
+            $sOptionSelector = str_replace(['label=', 'value='], '', $sOptionSelector);
         }
 
         if (is_null($oSelect)) {
             $this->fail("Select '$sSelector' was not found!");
         }
 
-        $oOptions = $oSelect->findAll('named', array('option', $oSelectorsHandler->xpathLiteral($sOptionSelector)));
+        $oOptions = $oSelect->findAll('named', ['option', $oSelectorsHandler->xpathLiteral($sOptionSelector)]);
 
         $oOption = $this->_getExactMatch($oOptions, $sOptionSelector);
 
@@ -306,7 +307,9 @@ abstract class MinkWrapper extends BaseTestCase
         }
 
         $this->getMinkSession()->getDriver()->selectOption(
-            $oSelect->getXpath(), $oOption->getValue(), false
+            $oSelect->getXpath(),
+            $oOption->getValue(),
+            false
         );
 
         $this->fireEvent($sSelector, 'change');
@@ -521,7 +524,7 @@ abstract class MinkWrapper extends BaseTestCase
 
             $sParsedSelector = $oSelectorsHandler->xpathLiteral($sSelector);
 
-            $oSelect = $page->find('named', array('select', $sParsedSelector));
+            $oSelect = $page->find('named', ['select', $sParsedSelector]);
 
             if (is_null($oSelect)) {
                 $this->fail("Element '$sSelector' was not found! ");
@@ -553,7 +556,7 @@ abstract class MinkWrapper extends BaseTestCase
     {
         $oSelect = $this->getElementLazy($sSelector);
         $sValue = $oSelect->getValue();
-        $oOptions = $oSelect->findAll('css', "option");
+        $oOptions = $oSelect->findAll('css', 'option');
         foreach ($oOptions as $iKey => $oOption) {
             if ($oOption->getValue() == $sValue) {
                 return $iKey;
@@ -721,7 +724,8 @@ abstract class MinkWrapper extends BaseTestCase
      */
     public function waitForJQueryToFinish($iTimeout = 10000)
     {
-        $this->getMinkSession()->wait($iTimeout * $this->_iWaitTimeMultiplier,
+        $this->getMinkSession()->wait(
+            $iTimeout * $this->_iWaitTimeMultiplier,
             "(typeof jQuery !== 'undefined' && 0 === jQuery.active && 0 === jQuery(':animated').length)"
         );
     }
@@ -736,7 +740,6 @@ abstract class MinkWrapper extends BaseTestCase
         return $this->getMinkSession()->getDriver()->getBrowser()->getAllWindowNames();
     }
 
-
     /**
      * Waits for frame to load by frame name
      *
@@ -749,8 +752,10 @@ abstract class MinkWrapper extends BaseTestCase
     public function waitForFrameToLoad($sFrame, $iTimeout = 10000, $blIgnoreResult = true)
     {
         try {
-            $this->getMinkSession()->getDriver()->getBrowser()->waitForFrameToLoad($sFrame,
-                $iTimeout * $this->_iWaitTimeMultiplier);
+            $this->getMinkSession()->getDriver()->getBrowser()->waitForFrameToLoad(
+                $sFrame,
+                $iTimeout * $this->_iWaitTimeMultiplier
+            );
         } catch (Exception $e) {
             if (!$blIgnoreResult) {
                 throw $e;
@@ -798,7 +803,7 @@ abstract class MinkWrapper extends BaseTestCase
     {
         $oDriver = $this->getMinkSession()->getDriver();
         if ($oDriver instanceof \Behat\Mink\Driver\SeleniumDriver) {
-            return $this->getMinkSession()->getDriver()->getBrowser()->captureEntirePageScreenshot($sFileName, "");
+            return $this->getMinkSession()->getDriver()->getBrowser()->captureEntirePageScreenshot($sFileName, '');
         }
 
         return '';
@@ -843,7 +848,7 @@ abstract class MinkWrapper extends BaseTestCase
      */
     protected function _getElementByIdOrName($sSelector)
     {
-        $sSelector = str_replace(array('name=', 'id='), array('', ''), $sSelector);
+        $sSelector = str_replace(['name=', 'id='], ['', ''], $sSelector);
 
         if (strpos($sSelector, '.') || strpos($sSelector, '[')) {
             $oElement = $this->_getElementByIdOrNameXpath($sSelector);
@@ -866,13 +871,15 @@ abstract class MinkWrapper extends BaseTestCase
         $sSelector = str_replace('link=', '', $sSelector);
 
         $sParsedSelector = $this->getMinkSession()->getSelectorsHandler()->xpathLiteral($sSelector);
-        $oElements = $this->getMinkSession()->getPage()->findAll('named', array('link', $sParsedSelector));
+        $oElements = $this->getMinkSession()->getPage()->findAll('named', ['link', $sParsedSelector]);
 
         if (empty($oElements)) {
             $aSelectorParts = explode(' ', $sSelector);
-            $aSelectorParts = array_map(array($this->getMinkSession()->getSelectorsHandler(), 'xpathLiteral'),
-                $aSelectorParts);
-            $sFormedSelector = "//a[contains(.," . implode(") and contains(.,", $aSelectorParts) . ")]";
+            $aSelectorParts = array_map(
+                [$this->getMinkSession()->getSelectorsHandler(), 'xpathLiteral'],
+                $aSelectorParts
+            );
+            $sFormedSelector = '//a[contains(.,' . implode(') and contains(.,', $aSelectorParts) . ')]';
             $oElements = $this->getMinkSession()->getPage()->findAll('xpath', $sFormedSelector);
         }
 
@@ -898,7 +905,7 @@ abstract class MinkWrapper extends BaseTestCase
      */
     protected function _getElementByIdOrNameCSS($sSelector)
     {
-        $oElement = $this->getMinkSession()->getPage()->find('css', "#" . $sSelector . ",*[name='$sSelector']");
+        $oElement = $this->getMinkSession()->getPage()->find('css', '#' . $sSelector . ",*[name='$sSelector']");
         return $oElement;
     }
 
@@ -950,7 +957,7 @@ abstract class MinkWrapper extends BaseTestCase
      */
     protected function _getSelectOptionByIndex($oSelect, $iIndex)
     {
-        $oOptions = $oSelect->findAll('css', "option");
+        $oOptions = $oSelect->findAll('css', 'option');
         foreach ($oOptions as $iKey => $oOption) {
             /** @var \Behat\Mink\Element\NodeElement $oOption  */
             if ($iIndex == $iKey) {
@@ -958,7 +965,7 @@ abstract class MinkWrapper extends BaseTestCase
             }
         }
 
-        return isset($oOption) ? $oOption->getValue() : "";
+        return isset($oOption) ? $oOption->getValue() : '';
     }
 
     /**
@@ -1034,6 +1041,6 @@ JSON.stringify(value)
 JS;
         $sResult = json_decode($this->getMinkSession()->getDriver()->getBrowser()->getEval($script));
 
-        return preg_replace("/[ \n]+/", " ", $sResult);
+        return preg_replace("/[ \n]+/", ' ', $sResult);
     }
 }

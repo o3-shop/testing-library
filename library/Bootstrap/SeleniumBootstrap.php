@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -35,7 +36,7 @@ class SeleniumBootstrap extends BootstrapBase
     {
         parent::init();
 
-        define("SHOP_EDITION", ($this->getTestConfig()->getShopEdition() == 'EE') ? 'EE' : 'PE_CE');
+        define('SHOP_EDITION', ($this->getTestConfig()->getShopEdition() == 'EE') ? 'EE' : 'PE_CE');
 
         $this->prepareScreenShots();
         $this->copyTestFilesToShop();
@@ -89,8 +90,8 @@ class SeleniumBootstrap extends BootstrapBase
     public function copyTestFilesToShop()
     {
         $config = $this->getTestConfig();
-        $target = $config->getRemoteDirectory() ? $config->getRemoteDirectory().'/_cc.php' : $config->getShopPath().'/_cc.php';
+        $target = $config->getRemoteDirectory() ? $config->getRemoteDirectory() . '/_cc.php' : $config->getShopPath() . '/_cc.php';
         $fileCopier = new FileCopier();
-        $fileCopier->copyFiles(TEST_LIBRARY_PATH .'_cc.php', $target, true);
+        $fileCopier->copyFiles(TEST_LIBRARY_PATH . '_cc.php', $target, true);
     }
 }
