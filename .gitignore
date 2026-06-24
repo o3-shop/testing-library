@@ -1,9 +1,10 @@
 # Composer
 composer.lock
 vendor/
-
+vendor
 # Testing library
 test_config.yml
 
 # IDE
 .idea
+oxc_*.txt

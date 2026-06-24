@@ -22,6 +22,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "phpunit/phpunit": "^9.6.4",
+        "monolog/monolog": "^2.0",
         "pdepend/pdepend": "^2.10",
         "mikey179/vfsstream": "~1.6.8",
         "behat/mink": "~1.5.0",
@@ -41,8 +42,8 @@
         "o3-shop/codeception-modules": "^1.0.0",
         "o3-shop/codeception-page-objects": "^v1.0.0",
         "o3-shop/developer-tools": "^1.0.0",
-        "o3-shop/shop-ce": "^1.2",
-        "symfony/polyfill-intl-idn": "1.17.1"
+        "o3-shop/shop-ce": "^1.2 || dev-*",
+        "symfony/polyfill-intl-idn": "^1.38.1"
     },
     "bin": [
         "bin/reset-shop",
@@ -93,5 +94,11 @@
     },
     "replace": {
         "oxid-esales/testing-library": "8.1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "o3-shop/shop-unified-namespace-generator": true,
+            "o3-shop/shop-composer-plugin": true
+        }
     }
 }

@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -19,7 +20,6 @@
  */
 
 namespace OxidEsales\TestingLibrary\Bootstrap {
-
     class UnitBootstrap extends BootstrapBase
     {
         /** @var int Whether to add demo data. */
@@ -37,8 +37,8 @@ namespace OxidEsales\TestingLibrary\Bootstrap {
             error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_WARNING);
 
             $currentTestSuite = $this->getTestConfig()->getCurrentTestSuite();
-            if (file_exists($currentTestSuite .'/additional.inc.php')) {
-                include_once $currentTestSuite .'/additional.inc.php';
+            if (file_exists($currentTestSuite . '/additional.inc.php')) {
+                include_once $currentTestSuite . '/additional.inc.php';
                 // There is a need to reinitialize config, otherwise configs from SQL file which can be imported via
                 // additional.inc.php will not be taken.
                 $this->initializeConfig();
@@ -76,7 +76,6 @@ namespace OxidEsales\TestingLibrary\Bootstrap {
 }
 
 namespace {
-
     /**
      * @deprecated Use TestConfig::getCurrentTestSuite() or TestConfig::getTempDirectory().
      *

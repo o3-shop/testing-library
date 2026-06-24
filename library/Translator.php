@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -19,8 +20,6 @@
  */
 
 namespace OxidEsales\TestingLibrary;
-
-
 
 class Translator
 {
@@ -37,7 +36,7 @@ class Translator
     /**
      * @var $_aUntranslated array variable
      */
-    protected $_aUntranslated = array();
+    protected $_aUntranslated = [];
 
     /**
      * $_aUntranslated setter
@@ -109,7 +108,6 @@ class Translator
         return $this->_aKeys;
     }
 
-
     /**
      * Sets admin value
      *
@@ -171,17 +169,16 @@ class Translator
         $this->setAdmin($blAdmin);
     }
 
-
     public function translate($sString)
     {
-        $aUntranslated = array();
+        $aUntranslated = [];
         if (!$this->_isTranslateAble($sString)) {
             return $sString;
         }
 
         $iLang = $this->getLanguage();
         $blAdmin = $this->getAdmin();
-        $aTranslations = array();
+        $aTranslations = [];
         $aKeys = $this->_getKeys();
         foreach ($aKeys as $sKey) {
             $aTranslations[$sKey] = \OxidEsales\Eshop\Core\Registry::getLang()->translateString($sKey, $iLang, $blAdmin);
@@ -192,7 +189,7 @@ class Translator
         }
         $this->setUntranslated($aUntranslated);
 
-        $aNewKeys = array();
+        $aNewKeys = [];
         foreach ($aKeys as $sKey => $sValue) {
             if (in_array($sValue, $aUntranslated)) {
                 $aNewKeys[$sKey] = $sValue;
@@ -202,7 +199,6 @@ class Translator
         }
         return str_replace($aNewKeys, $aTranslations, $sString);
     }
-
 
     /**
      * Checks if string can be translated
@@ -214,7 +210,7 @@ class Translator
     protected function _isTranslateAble($sString)
     {
         $sPattern = $this->getTranslationPattern();
-        $aMatches = array();
+        $aMatches = [];
         if (is_array($sString)) {
             $sString = implode('_DELIMITER_', $sString);
         }

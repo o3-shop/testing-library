@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -18,7 +19,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
 
-ini_set("display_errors", false);
+ini_set('display_errors', false);
 
 /**
  * Calculate all needed metrics.
@@ -35,7 +36,7 @@ class Metrics
      * To store stats for classes
      * @var array
      */
-    protected $_aStats = array();
+    protected $_aStats = [];
     /**
      * Variable to store total of CCN
      * @var int
@@ -191,7 +192,7 @@ class Metrics
         $this->_iTotalCrapIndex = 0;
         $this->_iTotalNPath = 0;
         $this->_iTotalLLOC = 0;
-        $this->_aStats = array();
+        $this->_aStats = [];
     }
 
     /**
@@ -557,40 +558,51 @@ function printUsage($arg)
     echo 'Usage: php ' . basename($arg) . ' MetricsXml' . PHP_EOL;
     echo '    MetricsXml    - Metrics in PDepend xml format' . PHP_EOL;
     echo PHP_EOL;
-    die("");
+    die('');
 }
 
-if (!isset($argv["1"]) || !$argv["1"]) {
-    printUsage($argv["0"]);
+if (!isset($argv['1']) || !$argv['1']) {
+    printUsage($argv['0']);
 }
 
-$sMetricsXml = $argv["1"];
-
+$sMetricsXml = $argv['1'];
 
 try {
     $oMetrics = new Metrics($sMetricsXml);
     if ($oMetrics->isExistingMetricsFile()) {
         $oMetrics->read();
 
-        echo "Total Avg ccn\t= " . round($oMetrics->getTotalAverageCCN(),
-                3) . " (max: " . $oMetrics->getMaxCCN() . ")" . PHP_EOL;
-        echo "Total Avg crap\t= " . round($oMetrics->getTotalAverageCrapIndex(),
-                3) . " (max: " . $oMetrics->getMaxCrapIndex() . ")" . PHP_EOL;
-        echo "Total Avg NPath\t= " . round($oMetrics->getTotalAverageNPath(),
-                3) . " (max: " . $oMetrics->getMaxNPath() . ")" . PHP_EOL;
-        echo "Total LLOC\t= " . $oMetrics->getTotalLLOC() . " (max: " . $oMetrics->getMaxLLOC() . ")" . PHP_EOL . PHP_EOL;
+        echo "Total Avg ccn\t= " . round(
+            $oMetrics->getTotalAverageCCN(),
+            3
+        ) . ' (max: ' . $oMetrics->getMaxCCN() . ')' . PHP_EOL;
+        echo "Total Avg crap\t= " . round(
+            $oMetrics->getTotalAverageCrapIndex(),
+            3
+        ) . ' (max: ' . $oMetrics->getMaxCrapIndex() . ')' . PHP_EOL;
+        echo "Total Avg NPath\t= " . round(
+            $oMetrics->getTotalAverageNPath(),
+            3
+        ) . ' (max: ' . $oMetrics->getMaxNPath() . ')' . PHP_EOL;
+        echo "Total LLOC\t= " . $oMetrics->getTotalLLOC() . ' (max: ' . $oMetrics->getMaxLLOC() . ')' . PHP_EOL . PHP_EOL;
 
         $aStats = $oMetrics->getClassesStats();
 
         foreach ($aStats as $sClass => $aClass) {
             if (array_key_exists('stat', $aClass)) {
                 echo("Total for $sClass" . PHP_EOL);
-                echo "\tAvg ccn \t= " . round($aClass['stat']['cnn'],
-                        3) . " (max: " . $aClass['max']['cnn'] . ")" . PHP_EOL;
-                echo "\tAvg crap\t= " . round($aClass['stat']['crap'],
-                        3) . " (max: " . $aClass['max']['crap'] . ")" . PHP_EOL;
-                echo "\tAvg npath\t= " . round($aClass['stat']['npath'],
-                        3) . " (max: " . $aClass['max']['npath'] . ")" . PHP_EOL;
+                echo "\tAvg ccn \t= " . round(
+                    $aClass['stat']['cnn'],
+                    3
+                ) . ' (max: ' . $aClass['max']['cnn'] . ')' . PHP_EOL;
+                echo "\tAvg crap\t= " . round(
+                    $aClass['stat']['crap'],
+                    3
+                ) . ' (max: ' . $aClass['max']['crap'] . ')' . PHP_EOL;
+                echo "\tAvg npath\t= " . round(
+                    $aClass['stat']['npath'],
+                    3
+                ) . ' (max: ' . $aClass['max']['npath'] . ')' . PHP_EOL;
                 echo "\tLLOC \t\t= " . $aClass['sum']['locExecutable'] . PHP_EOL . PHP_EOL;
             }
         }

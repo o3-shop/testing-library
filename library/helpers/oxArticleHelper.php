@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -73,8 +74,8 @@ class oxArticleHelper extends \OxidEsales\Eshop\Application\Model\Article
      */
     public static function resetCache()
     {
-        parent::$_aArticleVendors = array();
-        parent::$_aArticleManufacturers = array();
+        parent::$_aArticleVendors = [];
+        parent::$_aArticleManufacturers = [];
         parent::$_aLoadedParents = null;
         parent::$_aSelList = null;
     }
@@ -84,7 +85,7 @@ class oxArticleHelper extends \OxidEsales\Eshop\Application\Model\Article
      */
     public static function resetArticleCategories()
     {
-        parent::$_aArticleCats = array();
+        parent::$_aArticleCats = [];
     }
 
     /**

@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -69,7 +70,7 @@ class Curl
      * Connection Charset.
      * @var string
      */
-    protected $_sConnectionCharset = "UTF-8";
+    protected $_sConnectionCharset = 'UTF-8';
 
     /**
      * Curl call header.
@@ -88,7 +89,7 @@ class Curl
      *
      * @var array
      */
-    protected $_aOptions = array('CURLOPT_RETURNTRANSFER' => 1);
+    protected $_aOptions = ['CURLOPT_RETURNTRANSFER' => 1];
 
     /**
      * Request HTTP status call code.
@@ -115,8 +116,8 @@ class Curl
      */
     public function getUrl()
     {
-        if ($this->getMethod() == "GET" && $this->getQuery()) {
-            $this->_sUrl = $this->_sUrl . "?" . $this->getQuery();
+        if ($this->getMethod() == 'GET' && $this->getQuery()) {
+            $this->_sUrl = $this->_sUrl . '?' . $this->getQuery();
         }
 
         return $this->_sUrl;
@@ -130,10 +131,10 @@ class Curl
     public function setQuery($sQuery = null)
     {
         if (is_null($sQuery)) {
-            $sQuery = "";
+            $sQuery = '';
             if ($aParams = $this->getParameters()) {
                 $aParams = $this->_prepareQueryParameters($aParams);
-                $sQuery = http_build_query($aParams, "", "&");
+                $sQuery = http_build_query($aParams, '', '&');
             }
         }
 
@@ -203,10 +204,10 @@ class Curl
      */
     public function setHeader($aHeader = null)
     {
-        if (is_null($aHeader) && $this->getMethod() == "POST") {
+        if (is_null($aHeader) && $this->getMethod() == 'POST') {
             $sHost = $this->getHost();
 
-            $aHeader = array();
+            $aHeader = [];
             $aHeader[] = 'POST /cgi-bin/webscr HTTP/1.1';
             $aHeader[] = 'Content-Type: multipart/form-data';
             if (isset($sHost)) {
@@ -299,7 +300,7 @@ class Curl
 
         if ($iCurlErrorNumber) {
             $host = $this->getUrl();
-            $parameters = http_build_query($this->getParameters(), "", "&");
+            $parameters = http_build_query($this->getParameters(), '', '&');
             $message = $this->_getErrorMessage($iCurlErrorNumber);
             throw new Exception("cURL failed with message '$message' when calling '$host?$parameters'");
         }
@@ -370,7 +371,7 @@ class Curl
         }
         $this->_setOpt(CURLOPT_URL, $this->getUrl());
 
-        if ($this->getMethod() == "POST") {
+        if ($this->getMethod() == 'POST') {
             $this->_setOpt(CURLOPT_POST, 1);
             $this->_setOpt(CURLOPT_POSTFIELDS, $this->_formParamsForPost($this->getParameters()));
         }
@@ -393,7 +394,7 @@ class Curl
      */
     protected function _formParamsForPost($aParameters, $sParentKey = null)
     {
-        $aResult = array();
+        $aResult = [];
         foreach ($aParameters as $sKey => $mParam) {
             if (is_array($mParam)) {
                 $sKey = $sParentKey ? "[$sKey]" : $sKey;
@@ -501,7 +502,7 @@ class Curl
      */
     protected function _prepareQueryParameters($aParams)
     {
-        $aParams = array_map(array($this, '_htmlDecode'), $aParams);
+        $aParams = array_map([$this, '_htmlDecode'], $aParams);
 
         return $aParams;
     }
@@ -523,5 +524,4 @@ class Curl
 
         return $mParam;
     }
-
 }

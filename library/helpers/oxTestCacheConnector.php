@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -24,7 +25,7 @@
 class oxTestCacheConnector implements \OxidEsales\Eshop\Application\Model\Contract\CacheConnectorInterface
 {
     /** @var array Cached items. */
-    public $aCache = array();
+    public $aCache = [];
 
     /**
      * Returns whether this cache connector is available.
@@ -91,7 +92,6 @@ class oxTestCacheConnector implements \OxidEsales\Eshop\Application\Model\Contra
         } else {
             $this->aCache[$mKey] = null;
         }
-
     }
 
     /**
@@ -99,6 +99,6 @@ class oxTestCacheConnector implements \OxidEsales\Eshop\Application\Model\Contra
      */
     public function flush()
     {
-        $this->aCache = array();
+        $this->aCache = [];
     }
 }

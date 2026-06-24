@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -17,6 +18,7 @@
  * @copyright  Copyright (c) 2022 O3-Shop (https://www.o3-shop.com)
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
+
 namespace OxidEsales\TestingLibrary\Services\Library\DatabaseRestorer;
 
 use Exception;
@@ -53,7 +55,7 @@ class DatabaseRestorer implements DatabaseRestorerInterface
         $data = $this->getTableData($tables);
         $checksum = $this->getTableChecksum($tables);
 
-        $this->dbDump[$dumpName] = array('columns' => $columns, 'data' => $data, 'checksum' => $checksum);
+        $this->dbDump[$dumpName] = ['columns' => $columns, 'data' => $data, 'checksum' => $checksum];
     }
 
     /**
@@ -135,8 +137,8 @@ class DatabaseRestorer implements DatabaseRestorerInterface
         $data = $this->getDumpData();
 
         $this->executeQuery("TRUNCATE TABLE `$table`");
-        if (isset($data[$table]["_sql_"])) {
-            $this->executeQuery($data[$table]["_sql_"]);
+        if (isset($data[$table]['_sql_'])) {
+            $this->executeQuery($data[$table]['_sql_']);
         }
     }
 
@@ -150,7 +152,7 @@ class DatabaseRestorer implements DatabaseRestorerInterface
     {
         $database = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
 
-        $columns = array();
+        $columns = [];
         foreach ($tables as $table) {
             $tmp = $database->getAll("SHOW COLUMNS FROM `$table`");
             foreach ($tmp as $sub) {
@@ -173,20 +175,19 @@ class DatabaseRestorer implements DatabaseRestorerInterface
     {
         $db = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
 
-        $data = array();
+        $data = [];
         foreach ($tables as $table) {
-            $data[$table] = array();
+            $data[$table] = [];
 
             $result = $db->select("SELECT * FROM `${table}`");
             if ($result && $result->count() > 0) {
-
-                $rows = array();
+                $rows = [];
                 while (!$result->EOF) {
                     $rows[] = $result->fields;
 
                     $result->fetchRow();
                 }
-                $data[$table]["_sql_"] = $this->getInsertString($rows, $table);
+                $data[$table]['_sql_'] = $this->getInsertString($rows, $table);
             }
         }
 
@@ -219,7 +220,7 @@ class DatabaseRestorer implements DatabaseRestorerInterface
         $excessColumns = array_diff($currentColumns, $dumpColumns);
 
         if (!empty($excessColumns)) {
-            $sSQL = "ALTER TABLE $sTable DROP COLUMN (".implode(', ', $excessColumns).")";
+            $sSQL = "ALTER TABLE $sTable DROP COLUMN (" . implode(', ', $excessColumns) . ')';
             $this->executeQuery($sSQL);
         }
     }
@@ -278,22 +279,22 @@ class DatabaseRestorer implements DatabaseRestorerInterface
      */
     private function getInsertString($rows, $table)
     {
-        $columns = array();
-        $values = array();
+        $columns = [];
+        $values = [];
         foreach ($rows as $row) {
             if (empty($columns)) {
                 $columns = array_keys($row);
             }
-            $rowValues = array();
+            $rowValues = [];
             foreach ($row as $entry) {
-                $entry = is_null($entry) ? "NULL" : \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC)->quote($entry);
+                $entry = is_null($entry) ? 'NULL' : \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC)->quote($entry);
                 $rowValues[] = $entry;
             }
-            $values[] = "(". implode(", ", $rowValues).")";
+            $values[] = '(' . implode(', ', $rowValues) . ')';
         }
 
         $query = "INSERT INTO $table ";
-        $query .= "(`".implode("`, `", $columns)."`) VALUES ".implode(", ", $values);
+        $query .= '(`' . implode('`, `', $columns) . '`) VALUES ' . implode(', ', $values);
 
         return $query;
     }
@@ -307,13 +308,13 @@ class DatabaseRestorer implements DatabaseRestorerInterface
      */
     private function getTableChecksum($aTables)
     {
-        $aTables = is_array($aTables) ? $aTables : array($aTables);
+        $aTables = is_array($aTables) ? $aTables : [$aTables];
         $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_ASSOC);
-        $sSelect = 'CHECKSUM TABLE `' . implode("`, `", $aTables) . '`';
+        $sSelect = 'CHECKSUM TABLE `' . implode('`, `', $aTables) . '`';
         $aResults = $oDb->getAll($sSelect);
 
         $sDbName = \OxidEsales\Eshop\Core\Registry::getConfig()->getConfigParam('dbName');
-        $aChecksum = array();
+        $aChecksum = [];
         foreach ($aResults as $aResult) {
             $sTable = str_replace($sDbName . '.', '', $aResult['Table']);
             $aChecksum[$sTable] = $aResult['Checksum'];
@@ -330,7 +331,7 @@ class DatabaseRestorer implements DatabaseRestorerInterface
     private function getDbTables()
     {
         $oDB = \OxidEsales\Eshop\Core\DatabaseProvider::getMaster(\OxidEsales\Eshop\Core\DatabaseProvider::FETCH_MODE_NUM);
-        $aTables = $oDB->getCol("SHOW TABLES");
+        $aTables = $oDB->getCol('SHOW TABLES');
 
         foreach ($aTables as $iKey => $sTable) {
             if (strpos($sTable, 'oxv_') === 0) {

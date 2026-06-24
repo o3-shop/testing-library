@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
@@ -17,6 +18,7 @@
  * @copyright  Copyright (c) 2022 O3-Shop (https://www.o3-shop.com)
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
+
 namespace OxidEsales\TestingLibrary\Services\Library\DatabaseRestorer;
 
 use Exception;
@@ -39,10 +41,10 @@ class DatabaseRestorerFactory
             $className = __NAMESPACE__ . '\\' . $className;
         }
 
-        $restorer = class_exists($className) ? new $className : new DatabaseRestorer();
+        $restorer = class_exists($className) ? new $className() : new DatabaseRestorer();
 
         if (!($restorer instanceof DatabaseRestorerInterface)) {
-            throw new Exception("Database restorer class should implement DatabaseRestorerInterface interface!");
+            throw new Exception('Database restorer class should implement DatabaseRestorerInterface interface!');
         }
 
         return $restorer;

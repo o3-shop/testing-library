@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -20,8 +21,8 @@
 
 namespace OxidEsales\TestingLibrary;
 
-use Exception;
 use DateTime;
+use Exception;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopEnterprise\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationGeneratorBridgeInterface;
 use PHPUnit\Framework\AssertionFailedError;
@@ -49,16 +50,16 @@ abstract class AcceptanceTestCase extends MinkWrapper
     protected $_blEnableLog = false;
 
     /** @var array List of frames. Used to go to correct frame from the top frame. */
-    protected $_aFramePaths = array(
-        "basefrm" => "basefrm",
-        "header" => "header",
-        "edit" => "basefrm/edit",
-        "list" => "basefrm/list",
-        "navigation" => "navigation/adminnav",
-        "adminnav" => "navigation/adminnav",
-        "dynexport_main" => "basefrm/dynexport_main",
-        "dynexport_do" => "basefrm/dynexport_do",
-    );
+    protected $_aFramePaths = [
+        'basefrm' => 'basefrm',
+        'header' => 'header',
+        'edit' => 'basefrm/edit',
+        'list' => 'basefrm/list',
+        'navigation' => 'navigation/adminnav',
+        'adminnav' => 'navigation/adminnav',
+        'dynexport_main' => 'basefrm/dynexport_main',
+        'dynexport_do' => 'basefrm/dynexport_do',
+    ];
 
     /** @var string Language id. */
     protected $translateLanguageId = '1';
@@ -70,19 +71,19 @@ abstract class AcceptanceTestCase extends MinkWrapper
     protected static $testsSuitePath = '';
 
     /** @var  array All possible errors/warnings which might appear in the HTML due to some error */
-    protected $errorsInPage = array(
-        "<b>Warning</b>: " => "PHP Warning is in the page",
-        "Warning: " => "PHP Warning is in the page",
-        "Fatal error: " => "PHP Fatal error is in the page",
-        "Catchable fatal error: " => " Catchable fatal error is in the page",
-        "Notice: " => "PHP Notice is in the page",
-        "exception '" => "Uncaught exception is in the page",
-        "does not exist or is not accessible!" => "Warning about not existing function is in the page ",
-        "ERROR: Tran" => "Missing translation for constant (ERROR: Translation for...)",
-        "EXCEPTION_" => "Exception - component not found (EXCEPTION_)",
-        "oxException" => "Exception is in page",
-        "Smarty error:" => "Smarty error is in page"
-    );
+    protected $errorsInPage = [
+        '<b>Warning</b>: ' => 'PHP Warning is in the page',
+        'Warning: ' => 'PHP Warning is in the page',
+        'Fatal error: ' => 'PHP Fatal error is in the page',
+        'Catchable fatal error: ' => ' Catchable fatal error is in the page',
+        'Notice: ' => 'PHP Notice is in the page',
+        "exception '" => 'Uncaught exception is in the page',
+        'does not exist or is not accessible!' => 'Warning about not existing function is in the page ',
+        'ERROR: Tran' => 'Missing translation for constant (ERROR: Translation for...)',
+        'EXCEPTION_' => 'Exception - component not found (EXCEPTION_)',
+        'oxException' => 'Exception is in page',
+        'Smarty error:' => 'Smarty error is in page',
+    ];
 
     /** @var int How many retry times are left. */
     private $retryTimesLeft;
@@ -116,7 +117,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      * @param array  $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
@@ -265,7 +266,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
             }
         }
         echo $sErrorMsg;
-        echo " Selenium tests terminated.";
+        echo ' Selenium tests terminated.';
         $this->stopMinkSession();
 
         exit(1);
@@ -327,7 +328,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $sString = self::getTranslator()->translate($sString);
         $aUntranslated = self::getTranslator()->getUntranslated();
         if (count($aUntranslated) > 0) {
-            self::fail("Untranslated strings: " . implode(', ', $aUntranslated));
+            self::fail('Untranslated strings: ' . implode(', ', $aUntranslated));
         }
         return $sString;
     }
@@ -349,12 +350,12 @@ abstract class AcceptanceTestCase extends MinkWrapper
         if ($this->getTestConfig()->isSubShop() || $mForceSubShop) {
             if (!$blForceMainShop) {
                 if (!is_string($mForceSubShop)) {
-                    $mForceSubShop = "link=subshop";
+                    $mForceSubShop = 'link=subshop';
                 }
                 $this->clickAndWait($mForceSubShop);
             } else {
                 $sShopNr = $this->getShopVersionNumber();
-                $this->clickAndWait("link=O3-Shop " . $sShopNr);
+                $this->clickAndWait('link=O3-Shop ' . $sShopNr);
             }
         }
         $this->checkForErrors();
@@ -368,8 +369,8 @@ abstract class AcceptanceTestCase extends MinkWrapper
     public function switchLanguage($language)
     {
         $this->waitForItemAppear("//p[@id='languageTrigger']/a");
-        $this->click("languageTrigger");
-        $this->waitForItemAppear("languages");
+        $this->click('languageTrigger');
+        $this->waitForItemAppear('languages');
         $this->clickAndWait("//ul[@id='languages']//li/a/span[text()='" . $language . "']");
         $this->getTranslator()->setLanguageByName($language);
     }
@@ -383,7 +384,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     {
         $this->waitForItemAppear("//p[@id='currencyTrigger']/a");
         $this->click("//p[@id='currencyTrigger']/a");
-        $this->waitForItemAppear("currencies");
+        $this->waitForItemAppear('currencies');
         $this->clickAndWait("//ul[@id='currencies']//*[text()='$currency']");
     }
 
@@ -399,10 +400,10 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $this->selectWindow(null);
         $this->click("//ul[@id='topMenu']/li[1]/a");
         try {
-            $this->waitForItemAppear("loginBox", 2);
+            $this->waitForItemAppear('loginBox', 2);
         } catch (Exception $e) {
             $this->click("//ul[@id='topMenu']/li[1]/a");
-            $this->waitForItemAppear("loginBox", 2);
+            $this->waitForItemAppear('loginBox', 2);
         }
         $this->type("//div[@id='loginBox']//input[@name='lgn_usr']", $userName);
         $this->type("//div[@id='loginBox']//input[@name='lgn_pwd']", $userPass);
@@ -422,10 +423,10 @@ abstract class AcceptanceTestCase extends MinkWrapper
      */
     public function openArticle($articleId, $clearCache = false, $shopId = null)
     {
-        $aParams = array(
+        $aParams = [
             'cl' => 'details',
             'anid' => $articleId,
-        );
+        ];
 
         $this->openNewWindow($this->_getShopUrl($aParams, $shopId), $clearCache);
     }
@@ -443,14 +444,13 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $articleId,
         $amount = 1,
         $controller = 'basket',
-        $additionalParams = array(),
+        $additionalParams = [],
         $shopId = null
     ) {
         $actionName = 'tobasket';
 
         $this->callBasketAction($actionName, $articleId, $amount, $controller, $additionalParams, $shopId);
     }
-
 
     /**
      * Change product in basket.
@@ -465,7 +465,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $articleId,
         $amount = 1,
         $controller = 'basket',
-        $additionalParams = array(),
+        $additionalParams = [],
         $shopId = null
     ) {
         $actionName = 'changebasket';
@@ -493,7 +493,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     public function searchFor($searchParam)
     {
         $this->type("//input[@id='searchParam']", $searchParam);
-        $this->keyPress("searchParam", "\\13"); //pressing enter key
+        $this->keyPress('searchParam', '\\13'); //pressing enter key
         $this->waitForPageToLoad(10000);
         $this->checkForErrors();
     }
@@ -503,12 +503,12 @@ abstract class AcceptanceTestCase extends MinkWrapper
      *
      * @param string $language active language in shop.
      */
-    public function openBasket($language = "English")
+    public function openBasket($language = 'English')
     {
         if ($language == 'Deutsch') {
-            $sLink = "Warenkorb zeigen";
+            $sLink = 'Warenkorb zeigen';
         } else {
-            $sLink = "Display cart";
+            $sLink = 'Display cart';
         }
 
         $this->click("//div[@id='miniBasket']/img");
@@ -527,7 +527,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
         if (!$this->isVisible("//div[@id='$elementId']//ul")) {
             $this->click("//div[@id='$elementId']//p");
         }
-        $itemValue = $itemValue ? "[text()='$itemValue']" : "";
+        $itemValue = $itemValue ? "[text()='$itemValue']" : '';
         $this->clickAndWait("//div[@id='$elementId']//ul/$extraIdent/a$itemValue");
     }
 
@@ -568,27 +568,27 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $menuLink1 = null,
         $menuLink2 = null,
         $forceMainShop = false,
-        $user = "admin@myo3-shop.com",
-        $pass = "admin0303",
-        $language = "English"
+        $user = 'admin@myo3-shop.com',
+        $pass = 'admin0303',
+        $language = 'English'
     ) {
-        $this->openNewWindow(shopURL . "admin");
-        $this->type("usr", $user);
-        $this->type("pwd", $pass);
-        $this->select("lng", "$language");
-        $this->select("prf", "Standard");
+        $this->openNewWindow(shopURL . 'admin');
+        $this->type('usr', $user);
+        $this->type('pwd', $pass);
+        $this->select('lng', "$language");
+        $this->select('prf', 'Standard');
         $this->clickAndWait("//input[@type='submit']");
         $this->waitForFrameToLoad('navigation', 1000);
-        $this->frame("navigation");
+        $this->frame('navigation');
 
         if ($this->getTestConfig()->isSubShop() && !$forceMainShop) {
-            $this->selectAndWaitFrame("selectshop", "label=subshop", "basefrm");
+            $this->selectAndWaitFrame('selectshop', 'label=subshop', 'basefrm');
         }
 
         if ($menuLink1 && $menuLink2) {
             $this->selectMenu($menuLink1, $menuLink2);
         } else {
-            $this->frame("basefrm");
+            $this->frame('basefrm');
         }
     }
 
@@ -610,9 +610,9 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $editElement = null,
         $listElement = null,
         $forceMainShop = false,
-        $user = "admin",
-        $pass = "admin",
-        $language = "English"
+        $user = 'admin',
+        $pass = 'admin',
+        $language = 'English'
     ) {
         $this->loginAdmin($menuLink1, $menuLink2, $forceMainShop, $user, $pass, $language);
     }
@@ -625,18 +625,18 @@ abstract class AcceptanceTestCase extends MinkWrapper
      * @param string $user      Shop admin username.
      * @param string $pass      Shop admin password.
      */
-    public function loginSubshopAdmin($menuLink1, $menuLink2, $user = "admin@myoxideshop.com", $pass = "admin0303")
+    public function loginSubshopAdmin($menuLink1, $menuLink2, $user = 'admin@myoxideshop.com', $pass = 'admin0303')
     {
-        $this->openNewWindow(shopURL . "admin");
-        $this->type("user", $user);
-        $this->type("pwd", $pass);
-        $this->select("chlanguage", "label=English");
-        $this->select("profile", "label=Standard");
+        $this->openNewWindow(shopURL . 'admin');
+        $this->type('user', $user);
+        $this->type('pwd', $pass);
+        $this->select('chlanguage', 'label=English');
+        $this->select('profile', 'label=Standard');
         $this->clickAndWait("//input[@type='submit']");
 
-        $this->frame("navigation");
+        $this->frame('navigation');
 
-        $this->selectAndWaitFrame("selectshop", "label=subshop", "basefrm");
+        $this->selectAndWaitFrame('selectshop', 'label=subshop', 'basefrm');
 
         $this->selectMenu($menuLink1, $menuLink2);
     }
@@ -652,16 +652,16 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $this->selectWindow(null);
 
         $this->frame('adminnav');
-        $this->waitForElement("link=" . $menuLink1);
-        $this->click("link=" . $menuLink1);
-        $this->click("link=" . $menuLink2);
+        $this->waitForElement('link=' . $menuLink1);
+        $this->click('link=' . $menuLink1);
+        $this->click('link=' . $menuLink2);
 
         $this->waitForFrameToLoad('basefrm', 5000, true);
-        $this->frame("basefrm");
+        $this->frame('basefrm');
         if ($this->isElementPresent('edit')) {
             $this->waitForFrameToLoad('edit', 5000, true);
-            $this->frame("edit");
-            $sFrameToLoad = "list";
+            $this->frame('edit');
+            $sFrameToLoad = 'list';
         } else {
             $sFrameToLoad = $this->isElementPresent('list') ? 'list' : 'basefrm';
         }
@@ -674,15 +674,15 @@ abstract class AcceptanceTestCase extends MinkWrapper
      *
      * @param string $sLocator logout link locator
      */
-    public function logoutAdmin($sLocator = "link=Logout")
+    public function logoutAdmin($sLocator = 'link=Logout')
     {
-        $this->frame("header");
+        $this->frame('header');
         $this->click($sLocator);
 
         try {
             $this->waitForPageToLoad(10000);
         } catch (Exception $e) {
-            $this->openNewWindow(shopURL . "admin");
+            $this->openNewWindow(shopURL . 'admin');
         }
 
         $this->checkForErrors();
@@ -721,7 +721,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
         }
 
         if ($blFollowPath && isset($this->_aFramePaths[$sFrame])) {
-            $aPath = explode("/", $this->_aFramePaths[$sFrame]);
+            $aPath = explode('/', $this->_aFramePaths[$sFrame]);
             $this->_selectFrameByPath($aPath);
         } else {
             $this->selectFrame($sFrame);
@@ -758,11 +758,11 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $sFrame = $sFrame ? $sFrame : $this->getSelectedFrame();
 
         if ($this->_aFramePaths[$sFrame]) {
-            $aPath = explode("/", $this->_aFramePaths[$sFrame]);
+            $aPath = explode('/', $this->_aFramePaths[$sFrame]);
             $sFrame = array_pop($aPath);
             $this->_selectFrameByPath($aPath);
         } else {
-            $this->selectFrame("relative=top");
+            $this->selectFrame('relative=top');
         }
 
         return $sFrame;
@@ -773,7 +773,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      *
      * @param string $sButtonSelector
      */
-    public function clickCreateNewItem($sButtonSelector = "btn.new")
+    public function clickCreateNewItem($sButtonSelector = 'btn.new')
     {
         $this->frame('edit');
         $this->click($sButtonSelector);
@@ -889,7 +889,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
             $expected = self::_clearString($expected);
             $sMessage = "'$expected' != '$actual' with message: " . $message;
         } else {
-            $sMessage = "Expected is not equal to actual parameter.";
+            $sMessage = 'Expected is not equal to actual parameter.';
         }
 
         parent::assertEquals($expected, $actual, $sMessage, $delta, $maxDepth, $canonicalize, $ignoreCase);
@@ -929,10 +929,10 @@ abstract class AcceptanceTestCase extends MinkWrapper
      */
     protected function _changeAdminLanguage($sLanguage, $sSelectLocator)
     {
-        $this->selectAndWaitFrame($sSelectLocator, "label=$sLanguage", "edit");
+        $this->selectAndWaitFrame($sSelectLocator, "label=$sLanguage", 'edit');
         $this->waitForElement($sSelectLocator);
         if ($this->getSelectedLabel($sSelectLocator) != $sLanguage) {
-            $this->selectAndWaitFrame($sSelectLocator, "label=$sLanguage", "edit");
+            $this->selectAndWaitFrame($sSelectLocator, "label=$sLanguage", 'edit');
         }
         usleep(300000);
         $this->checkForErrors();
@@ -946,7 +946,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     public function clickDeleteListItem($sId = '1')
     {
         $this->frame('list');
-        $this->clickAndConfirm("del.$sId", "edit");
+        $this->clickAndConfirm("del.$sId", 'edit');
     }
 
     /**
@@ -956,7 +956,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      */
     public function usePopUp($popUpElement = "//div[@id='container1_c']/table/tbody[2]/tr[1]/td[1]")
     {
-        $this->selectWindow("ajaxpopup");
+        $this->selectWindow('ajaxpopup');
         $this->windowMaximize();
         $this->waitForElement($popUpElement);
         $this->checkForErrors();
@@ -1097,7 +1097,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      * @param string $locator locator for delete button.
      * @param string $frame   frame which should be also loaded (this frame will be loaded after current frame is loaded).
      */
-    public function clickAndConfirm($locator, $frame = "")
+    public function clickAndConfirm($locator, $frame = '')
     {
         $this->click($locator);
         $this->getConfirmation();
@@ -1230,7 +1230,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      */
     protected function _waitForAppear($sMethod, $mParams, $sTimeToWait = 10, $blIgnoreResult = false)
     {
-        $aParams = is_array($mParams) ? $mParams : array($mParams);
+        $aParams = is_array($mParams) ? $mParams : [$mParams];
 
         $sTimeToWait = $sTimeToWait * 2 * $this->_iWaitTimeMultiplier;
         $blResetFrame = true;
@@ -1485,7 +1485,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      */
     public function assertElementText($value, $locator, $message = '')
     {
-        $message = $message ? : "Element '$locator' was not found or does not match value '$value'";
+        $message = $message ?: "Element '$locator' was not found or does not match value '$value'";
         if (!$this->waitForElementText($value, $locator, 10)) {
             $this->fail($message);
         }
@@ -1535,8 +1535,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
 
     /* ------------------------ Mink related functions ---------------------------------- */
 
-
-//----------------------------- Tests BoilerPlate related functions ------------------------------------
+    //----------------------------- Tests BoilerPlate related functions ------------------------------------
 
     /**
      * Creates a dump of the current database, stored in the file '/tmp/tmp_db_dump'
@@ -1565,7 +1564,6 @@ abstract class AcceptanceTestCase extends MinkWrapper
      */
     public function restoreDB($sTmpPrefix = null)
     {
-
         if ($this->oTestConfig->shouldRestoreAfterAcceptanceTests()) {
             $oServiceCaller = new ServiceCaller($this->getTestConfig());
             $oServiceCaller->setParameter('restoreDB', true);
@@ -1597,7 +1595,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     {
         \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sql);
         if ($this->getTestConfig()->getShopEdition() == 'EE') {
-            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute("delete from oxcache");
+            \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute('delete from oxcache');
         }
     }
 
@@ -1619,8 +1617,8 @@ abstract class AcceptanceTestCase extends MinkWrapper
         $sClass,
         $sFnc,
         $sId = null,
-        $aClassParams = array(),
-        $aFunctionParams = array(),
+        $aClassParams = [],
+        $aFunctionParams = [],
         $sShopId = null,
         $sLang = 'en'
     ) {
@@ -1704,7 +1702,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
         return $aData[$sVarName];
     }
 
-//----------------------------- Other functions, PHPUnit fixes, etc ------------------------------------
+    //----------------------------- Other functions, PHPUnit fixes, etc ------------------------------------
 
     /**
      * Return main shop number.
@@ -1742,9 +1740,9 @@ abstract class AcceptanceTestCase extends MinkWrapper
     public function getHeadingText($element)
     {
         $text = $this->getText($element);
-        if ($this->isElementPresent($element . "/a")) {
-            $search = $this->getText($element . "/a");
-            $text = str_replace($search, "", $text);
+        if ($this->isElementPresent($element . '/a')) {
+            $search = $this->getText($element . '/a');
+            $text = str_replace($search, '', $text);
         }
         return trim($text);
     }
@@ -1762,8 +1760,6 @@ abstract class AcceptanceTestCase extends MinkWrapper
             $serviceCaller->callService('ModuleInstaller', $shopId);
         }
     }
-
-
 
     /**
      * Removes \n signs and it leading spaces from string. keeps only single space in the ends of each row.
@@ -1792,7 +1788,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     public function clearCookies()
     {
         $testConfig = new TestConfig();
-        $shopUrl = preg_replace("|(https?://[^:/]*?):[0-9]+|", '$1', $testConfig->getShopUrl());
+        $shopUrl = preg_replace('|(https?://[^:/]*?):[0-9]+|', '$1', $testConfig->getShopUrl());
         $this->open($shopUrl . '/_cc.php');
         if ($this->getHtmlSource() != '<head></head><body></body>') {
             $this->stopMinkSession();
@@ -1831,10 +1827,10 @@ abstract class AcceptanceTestCase extends MinkWrapper
         if (file_exists($sLogFile)) {
             $aData = unserialize(file_get_contents($sLogFile));
         } else {
-            $aData = array();
+            $aData = [];
         }
         if (!$aData[$sMethod]) {
-            $aData[$sMethod] = array('time' => 0, 'count' => 0, 'messages' => array());
+            $aData[$sMethod] = ['time' => 0, 'count' => 0, 'messages' => []];
         }
         $aData[$sMethod]['time'] += intval($iTime * 10000);
         $aData[$sMethod]['count']++;
@@ -1861,7 +1857,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      */
     protected static function _clearString($sToClear)
     {
-        $sToClear = preg_replace("/[ \n]+/", " ", $sToClear);
+        $sToClear = preg_replace("/[ \n]+/", ' ', $sToClear);
         return $sToClear;
     }
 
@@ -1997,7 +1993,6 @@ abstract class AcceptanceTestCase extends MinkWrapper
         return false;
     }
 
-
     /**
      * Checks if currently opened window contains Service unavailable
      *
@@ -2015,7 +2010,6 @@ abstract class AcceptanceTestCase extends MinkWrapper
         return $result;
     }
 
-
     /**
      * Forms trace message from given array.
      *
@@ -2027,7 +2021,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
         if (!is_array($aTrace)) {
             return $aTrace;
         }
-        $aSkipMethods = array('main', 'runBare', '');
+        $aSkipMethods = ['main', 'runBare', ''];
         $sResult = '';
         $aReversedTrace = array_reverse($aTrace);
         foreach ($aReversedTrace as $aCall) {
@@ -2065,7 +2059,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
      * @param null  $sShopId
      * @return string
      */
-    protected function _getShopUrl($aParams = array(), $sShopId = null)
+    protected function _getShopUrl($aParams = [], $sShopId = null)
     {
         if ($sShopId) {
             $aParams['shp'] = $sShopId;
@@ -2073,7 +2067,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
             $aParams['shp'] = oxSHOPID;
         }
 
-        return shopURL . "index.php?" . http_build_query($aParams);
+        return shopURL . 'index.php?' . http_build_query($aParams);
     }
 
     /**
@@ -2164,7 +2158,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     /**
      * @throws \OxidEsales\Eshop\Core\Exception\StandardException
      */
-    protected function failOnLoggedExceptions()
+    protected function failOnLoggedExceptions(): void
     {
         if ($this->exceptionLogHelper->getExceptionLogFileContent()) {
             $this->fail();
@@ -2215,7 +2209,7 @@ abstract class AcceptanceTestCase extends MinkWrapper
     private function backupShopConfiguration()
     {
         $serviceCaller = new ServiceCaller($this->getTestConfig());
-        $serviceCaller->setParameter('backup',true);
+        $serviceCaller->setParameter('backup', true);
         $serviceCaller->callService('ProjectConfiguration');
     }
 

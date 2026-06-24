@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
  * O3-Shop is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by  
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
  * O3-Shop is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -17,8 +18,8 @@
  * @copyright  Copyright (c) 2022 O3-Shop (https://www.o3-shop.com)
  * @license    https://www.gnu.org/licenses/gpl-3.0  GNU General Public License 3 (GPLv3)
  */
-namespace OxidEsales\TestingLibrary\Services\ModuleInstaller;
 
+namespace OxidEsales\TestingLibrary\Services\ModuleInstaller;
 
 use Exception;
 use OxidEsales\Eshop\Core\Registry;
@@ -35,7 +36,9 @@ class ModuleInstaller implements ShopServiceInterface
     /**
      * @param ServiceConfig $config
      */
-    public function __construct($config) {}
+    public function __construct($config)
+    {
+    }
 
     /**
      * Starts installation of the shop.
@@ -49,7 +52,7 @@ class ModuleInstaller implements ShopServiceInterface
             $this->switchToShop($shopId);
         }
 
-        $modulesToActivate = $request->getParameter("modulestoactivate");
+        $modulesToActivate = $request->getParameter('modulestoactivate');
         $moduleDirectory = \OxidEsales\Eshop\Core\Registry::getConfig()->getModulesDir();
 
         $this->prepareModulesForActivation($moduleDirectory);
@@ -62,7 +65,7 @@ class ModuleInstaller implements ShopServiceInterface
 
     /**
      * Switch to subshop.
-     * 
+     *
      * @param integer $shopId
      *
      * @return integer
@@ -79,7 +82,7 @@ class ModuleInstaller implements ShopServiceInterface
             }
             Registry::set($key, null);
         }
-        $utilsObject = new \OxidEsales\Eshop\Core\UtilsObject;
+        $utilsObject = new \OxidEsales\Eshop\Core\UtilsObject();
         $utilsObject->resetInstanceCache();
         Registry::set(\OxidEsales\Eshop\Core\UtilsObject::class, $utilsObject);
         \OxidEsales\Eshop\Core\Module\ModuleVariablesLocator::resetModuleVariables();
@@ -109,7 +112,7 @@ class ModuleInstaller implements ShopServiceInterface
         $moduleCache = oxNew(\OxidEsales\Eshop\Core\Module\ModuleCache::class, $module);
         $moduleInstaller = oxNew(\OxidEsales\Eshop\Core\Module\ModuleInstaller::class, $moduleCache);
         if (!$moduleInstaller->activate($module)) {
-            throw new Exception("Error on module installation: " . $module->getId());
+            throw new Exception('Error on module installation: ' . $module->getId());
         }
     }
 
@@ -136,7 +139,7 @@ class ModuleInstaller implements ShopServiceInterface
     {
         $module = oxNew(\OxidEsales\Eshop\Core\Module\Module::class);
         if (!$module->loadByDir($modulePath)) {
-            throw new Exception("Module not found");
+            throw new Exception('Module not found');
         }
         return $module;
     }

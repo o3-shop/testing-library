@@ -3,13 +3,13 @@
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -21,6 +21,7 @@
 
 namespace OxidEsales\TestingLibrary;
 
+use Exception;
 use modOXID;
 use modOxUtilsDate;
 use oxDatabaseHelper;
@@ -37,7 +38,6 @@ use oxTestModules;
 use oxTestsStaticCleaner;
 use PHPUnit\Framework\TestResult;
 use ReflectionClass;
-use Exception;
 
 require_once TEST_LIBRARY_HELPERS_PATH . 'oxDatabaseHelper.php';
 require_once TEST_LIBRARY_HELPERS_PATH . 'modOxUtilsDate.php';
@@ -63,7 +63,7 @@ abstract class UnitTestCase extends BaseTestCase
     private $vfsStreamWrapper;
 
     /** @var array MultiShop tables used in shop */
-    private $multiShopTables = array(
+    private $multiShopTables = [
         'oxarticles',
         'oxcategories',
         'oxattribute',
@@ -74,17 +74,17 @@ abstract class UnitTestCase extends BaseTestCase
         'oxselectlist',
         'oxvendor',
         'oxvoucherseries',
-        'oxwrapping'
-    );
+        'oxwrapping',
+    ];
 
     /** @var array Queries to run on tear down. */
-    private $teardownQueries = array();
+    private $teardownQueries = [];
 
     /** @var array Tables to be restored after test run. */
-    private $tablesForCleanup = array();
+    private $tablesForCleanup = [];
 
     /** @var array Buffer variable of queries for feature testing */
-    protected $dbQueryBuffer = array();
+    protected $dbQueryBuffer = [];
 
     /**
      * Running setUpBeforeTestSuite action.
@@ -93,7 +93,7 @@ abstract class UnitTestCase extends BaseTestCase
      * @param array  $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
 
@@ -132,7 +132,6 @@ abstract class UnitTestCase extends BaseTestCase
         $this->getShopStateBackup()->backupRequestVariables();
     }
 
-
     /**
      * Initialize the fixture.
      *
@@ -143,7 +142,7 @@ abstract class UnitTestCase extends BaseTestCase
         \OxidEsales\Eshop\Core\Registry::getUtils()->cleanStaticCache();
         \OxidEsales\Eshop\Core\Registry::set(\OxidEsales\Eshop\Core\TableViewNameGenerator::class, null);
 
-        $this->dbQueryBuffer = array();
+        $this->dbQueryBuffer = [];
 
         $this->setShopId(null);
         $this->setAdminMode(false);
@@ -192,7 +191,6 @@ abstract class UnitTestCase extends BaseTestCase
         }
 
         if ($this->getResult() === null) {
-
             $this->ensureNoPhpSession();
 
             $this->cleanUpDatabase();
@@ -531,7 +529,7 @@ abstract class UnitTestCase extends BaseTestCase
 
             foreach ($shopIds as $iShopId) {
                 $sql = "REPLACE INTO `{$table}2shop` SET `oxmapobjectid` = ?, `oxshopid` = ?";
-                \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sql, array($mapId, $iShopId));
+                \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute($sql, [$mapId, $iShopId]);
             }
         }
     }
@@ -561,7 +559,7 @@ abstract class UnitTestCase extends BaseTestCase
      *
      * @deprecated This is just for compatibility with PHPUnit 4 - use getMockBuilder() to obtain a mock
      */
-    public function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false, $callOriginalMethods = false, $proxyTarget = null)
+    public function getMock($originalClassName, $methods = [], array $arguments = [], $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false, $callOriginalMethods = false, $proxyTarget = null)
     {
         $mockBuilder = $this->getMockBuilder($originalClassName);
         $mockBuilder->setMethods($methods);
@@ -696,7 +694,7 @@ abstract class UnitTestCase extends BaseTestCase
      */
     public function getProxyClassName($superClassName)
     {
-        if (strpos($superClassName,'\\')===false) {
+        if (strpos($superClassName, '\\') === false) {
             $superClassName = strtolower($superClassName);
         }
         $superClassName = \OxidEsales\Eshop\Core\Registry::get(UtilsObject::class)->getClassName($superClassName);
@@ -814,7 +812,7 @@ abstract class UnitTestCase extends BaseTestCase
     public function addClassExtension($extension, $class)
     {
         $utilsObject = new UtilsObject();
-        $extensions = $utilsObject->getModuleVar("aModules");
+        $extensions = $utilsObject->getModuleVar('aModules');
 
         \OxidEsales\Eshop\Core\Registry::set($class, null);
 
@@ -822,7 +820,7 @@ abstract class UnitTestCase extends BaseTestCase
             $extension = $extensions[strtolower($class)] . '&' . $extension;
         }
         $extensions[strtolower($class)] = $extension;
-        $utilsObject->setModuleVar("aModules", $extensions);
+        $utilsObject->setModuleVar('aModules', $extensions);
     }
 
     /**
@@ -834,10 +832,10 @@ abstract class UnitTestCase extends BaseTestCase
         \OxidEsales\Eshop\Core\Registry::set($class, null);
 
         $utilsObject = new UtilsObject();
-        $extensions = $utilsObject->getModuleVar("aModules");
+        $extensions = $utilsObject->getModuleVar('aModules');
 
         if (!$extensions) {
-            $extensions = array();
+            $extensions = [];
         }
 
         if ($class) {
@@ -847,7 +845,7 @@ abstract class UnitTestCase extends BaseTestCase
                 unset($extensions[$key]);
             }
         }
-        $utilsObject->setModuleVar("aModules", $extensions);
+        $utilsObject->setModuleVar('aModules', $extensions);
     }
 
     /**
@@ -876,7 +874,7 @@ abstract class UnitTestCase extends BaseTestCase
     {
         if ($array !== \array_replace_recursive($array, $subset)) {
             $this->fail(sprintf(
-                "Failed asserting that %s has the subset %s",
+                'Failed asserting that %s has the subset %s',
                 \var_export($array, true),
                 \var_export($subset, true)
             ));
@@ -977,7 +975,7 @@ abstract class UnitTestCase extends BaseTestCase
      */
     protected function _2Utf($sVal)
     {
-        return iconv("ISO-8859-1", "UTF-8", $sVal);
+        return iconv('ISO-8859-1', 'UTF-8', $sVal);
     }
 
     /**
@@ -991,11 +989,11 @@ abstract class UnitTestCase extends BaseTestCase
      *
      * @return mixed
      */
-    protected function _createStub($className, $methods, $testMethods = array())
+    protected function _createStub($className, $methods, $testMethods = [])
     {
         $mockedMethods = array_unique(array_merge(array_keys($methods), $testMethods));
 
-        $object = $this->getMock($className, $mockedMethods, array(), '', false);
+        $object = $this->getMock($className, $mockedMethods, [], '', false);
 
         foreach ($methods as $method => $value) {
             if (!in_array($method, $testMethods)) {

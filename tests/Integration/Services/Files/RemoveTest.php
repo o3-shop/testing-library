@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -30,16 +31,16 @@ class RemoveTest extends \OxidEsales\TestingLibrary\UnitTestCase
     {
         $rootPath = FilesHelper::prepareStructureAndReturnPath($this->getDirectoryStructure());
         $this->initializeFilesRemoval($rootPath, []);
-        $this->assertTrue(file_exists($rootPath.'/testDirectory/someFile.php'), "$rootPath/testDirectory/someFile.php");
-        $this->assertTrue(file_exists($rootPath.'/testDirectory/someFile2.php'), "$rootPath/testDirectory/someFile2.php");
+        $this->assertTrue(file_exists($rootPath . '/testDirectory/someFile.php'), "$rootPath/testDirectory/someFile.php");
+        $this->assertTrue(file_exists($rootPath . '/testDirectory/someFile2.php'), "$rootPath/testDirectory/someFile2.php");
     }
 
     public function testRemoveFile()
     {
         $rootPath = FilesHelper::prepareStructureAndReturnPath($this->getDirectoryStructure());
-        $this->initializeFilesRemoval($rootPath, [$rootPath.'/testDirectory/someFile.php']);
-        $this->assertFalse(file_exists($rootPath.'/testDirectory/someFile.php'), "$rootPath/testDirectory/someFile.php");
-        $this->assertTrue(file_exists($rootPath.'/testDirectory/someFile2.php'), "$rootPath/testDirectory/someFile2.php");
+        $this->initializeFilesRemoval($rootPath, [$rootPath . '/testDirectory/someFile.php']);
+        $this->assertFalse(file_exists($rootPath . '/testDirectory/someFile.php'), "$rootPath/testDirectory/someFile.php");
+        $this->assertTrue(file_exists($rootPath . '/testDirectory/someFile2.php'), "$rootPath/testDirectory/someFile2.php");
     }
 
     /**
@@ -64,7 +65,7 @@ class RemoveTest extends \OxidEsales\TestingLibrary\UnitTestCase
             'testDirectory' => [
                 'someFile.php' => 'content',
                 'someFile2.php' => 'content',
-            ]
+            ],
         ];
     }
 }

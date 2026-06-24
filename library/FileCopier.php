@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -27,7 +28,6 @@ use Exception;
  */
 class FileCopier
 {
-
     /**
      * Copy files to shop
      *
@@ -39,16 +39,16 @@ class FileCopier
     {
         if (strpos($target, ':') !== false && strpos($target, '@') !== false) {
             if (is_dir($source)) {
-                $source .= "/.";
+                $source .= '/.';
             }
-            $command = "scp -rp " . escapeshellarg($source) . " " . escapeshellarg($target);
+            $command = 'scp -rp ' . escapeshellarg($source) . ' ' . escapeshellarg($target);
             if ($setPermissions) {
-                $command = "rsync -rp --perms --chmod=u+rwx,g+rwx,o+rwx " . escapeshellarg($source) . " " . escapeshellarg($target);
+                $command = 'rsync -rp --perms --chmod=u+rwx,g+rwx,o+rwx ' . escapeshellarg($source) . ' ' . escapeshellarg($target);
             }
         } else {
-            $command = "cp -frT " . escapeshellarg($source) . " " . escapeshellarg($target);
+            $command = 'cp -frT ' . escapeshellarg($source) . ' ' . escapeshellarg($target);
             if ($setPermissions) {
-                $command .= " && chmod 777 " . escapeshellarg($target);
+                $command .= ' && chmod 777 ' . escapeshellarg($target);
             }
         }
         $this->executeCommand($command);
@@ -76,7 +76,7 @@ class FileCopier
      */
     protected function deleteTree($directory, $removeBaseDir = false)
     {
-        $files = array_diff(scandir($directory), array('.', '..'));
+        $files = array_diff(scandir($directory), ['.', '..']);
         foreach ($files as $file) {
             (is_dir("$directory/$file")) ? $this->deleteTree("$directory/$file", true) : @unlink("$directory/$file");
         }

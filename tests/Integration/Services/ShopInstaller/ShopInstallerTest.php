@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -20,15 +21,14 @@
 
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\TestingLibrary\ServiceCaller;
-use OxidEsales\TestingLibrary\Services\Library\DatabaseHandler;
 use OxidEsales\TestingLibrary\TestConfig;
 
 require_once TEST_LIBRARY_HELPERS_PATH . 'oxDatabaseHelper.php';
 
 class ShopInstallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-    const DEFAULT_OXMODULE_COLUMN_MAX_LENGTH = 32;
-    const CHANGED_OXMODULE_COLUMN_MAX_LENGTH = 100;
+    public const DEFAULT_OXMODULE_COLUMN_MAX_LENGTH = 32;
+    public const CHANGED_OXMODULE_COLUMN_MAX_LENGTH = 100;
 
     public function testShopInstallerCallsMigrationsAndRegeneratesViews()
     {
@@ -42,7 +42,7 @@ class ShopInstallerTest extends \OxidEsales\TestingLibrary\UnitTestCase
 
             $serviceCaller->callService('ShopInstaller');
         } catch (\Exception $e) {
-            exit("Failed to install shop with message:" . $e->getMessage());
+            exit('Failed to install shop with message:' . $e->getMessage());
         }
 
         $this->checkAfterInstall();

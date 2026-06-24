@@ -1,14 +1,15 @@
 <?php
+
 /**
  * This file is part of O3-Shop Testing library.
  *
- * O3-Shop is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ * O3-Shop is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * O3-Shop is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * O3-Shop is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with O3-Shop.  If not, see <http://www.gnu.org/licenses/>
@@ -25,12 +26,11 @@ use PHPUnit\Framework\TestCase;
  */
 class AllTestsRunner extends TestCase
 {
-
     /** @var array Default test suites */
-    protected static $testSuites = array();
+    protected static $testSuites = [];
 
     /** @var array Run these tests before any other */
-    protected static $priorityTests = array();
+    protected static $priorityTests = [];
 
     /** @var OxidEsales\TestingLibrary\TestConfig */
     protected static $testConfig;
@@ -39,7 +39,7 @@ class AllTestsRunner extends TestCase
     protected static $fileFilter = '*Test\.php';
 
     /** @var array Lower cased test paths. Used to check if test file was not already added. */
-    protected static $testFiles = array();
+    protected static $testFiles = [];
 
     /**
      * Forms test suite
@@ -63,7 +63,7 @@ class AllTestsRunner extends TestCase
             }
 
             $printer = new \OxidEsales\TestingLibrary\Printer();
-            $printer->write( "Adding unit tests from $sFilesSelector\n");
+            $printer->write("Adding unit tests from $sFilesSelector\n");
 
             $aTestFiles = array_diff($aTestFiles, static::$priorityTests);
             $oSuite = static::_addFilesToSuite($oSuite, $aTestFiles);
@@ -82,14 +82,14 @@ class AllTestsRunner extends TestCase
     public static function _addPriorityTests($oSuite, $aPriorityTests, $aTestDirectories)
     {
         if (!empty($aPriorityTests)) {
-            $aTestsToInclude = array();
+            $aTestsToInclude = [];
             foreach ($aPriorityTests as $sTestFile) {
                 $sFolder = dirname($sTestFile);
-                $aDirectories = array_filter($aTestDirectories, function($sTestDirectory) use ($sFolder){
+                $aDirectories = array_filter($aTestDirectories, function ($sTestDirectory) use ($sFolder) {
                     return (substr($sTestDirectory, -strlen($sFolder)) === $sFolder);
                 });
                 if (!empty($aDirectories)) {
-                    $fullPath = array_shift($aDirectories) .'/'. basename($sTestFile);
+                    $fullPath = array_shift($aDirectories) . '/' . basename($sTestFile);
                     if (file_exists($fullPath)) {
                         $aTestsToInclude[] = $fullPath;
                     }
@@ -106,12 +106,12 @@ class AllTestsRunner extends TestCase
      */
     protected static function _getTestDirectories()
     {
-        $aTestDirectories = array();
-        $aTestSuites = getenv('TEST_DIRS')? explode(',', getenv('TEST_DIRS')) : static::$testSuites;
+        $aTestDirectories = [];
+        $aTestSuites = getenv('TEST_DIRS') ? explode(',', getenv('TEST_DIRS')) : static::$testSuites;
 
         $testConfig = static::getTestConfig();
         foreach ($aTestSuites as $sSuite) {
-            $aTestDirectories[] = $testConfig->getCurrentTestSuite() ."/$sSuite";
+            $aTestDirectories[] = $testConfig->getCurrentTestSuite() . "/$sSuite";
         }
 
         return array_merge($aTestDirectories, static::_getDirectoryTree($aTestDirectories));
@@ -126,10 +126,10 @@ class AllTestsRunner extends TestCase
      */
     protected static function _getDirectoryTree($aDirectories)
     {
-        $aTree = array();
+        $aTree = [];
 
         foreach ($aDirectories as $sDirectory) {
-            $aTree = array_merge($aTree, array_diff(glob($sDirectory . "/*", GLOB_ONLYDIR), array('.', '..')));
+            $aTree = array_merge($aTree, array_diff(glob($sDirectory . '/*', GLOB_ONLYDIR), ['.', '..']));
         }
 
         if (!empty($aTree)) {
