@@ -8,4 +8,6 @@ test_config.yml
 # IDE
 .idea
 oxc_*.txt
+/tests/.phpunit.result.cache
+
 .DS_Store
